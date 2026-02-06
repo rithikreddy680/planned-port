@@ -1,6 +1,23 @@
 'use client';
 
+import { useState } from "react";
+
 export function ContactSection() {
+  const [copied, setCopied] = useState(false);
+
+  const email = "rithikreddy680@gmail.com";
+  const phone = "+61 450 933 183";
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1400);
+    } catch {
+      setCopied(false);
+    }
+  };
+
   return (
     <section className="relative min-h-screen bg-white px-6 py-24 text-black md:px-12 lg:px-20">
       <div className="mx-auto flex min-h-[80vh] max-w-6xl flex-col justify-between">
@@ -12,13 +29,22 @@ export function ContactSection() {
         </header>
 
         <div className="space-y-12">
-          <div className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
+          <div className="space-y-6">
+            <button
+              type="button"
+              onClick={handleCopyEmail}
+              className="group relative inline-flex items-baseline gap-3 text-2xl md:text-3xl lg:text-4xl tracking-tightest"
+            >
+              <span className="underline decoration-[3px] decoration-black underline-offset-8">
+                {email}
+              </span>
+              <span className="mono-label text-black/60">CLICK TO COPY</span>
+              <span className="pointer-events-none absolute left-0 top-full mt-2 text-xs text-black/70 opacity-0 transition-opacity duration-150 group-hover:opacity-100">
+                {copied ? "Copied to clipboard" : phone}
+              </span>
+            </button>
+
             <nav className="flex flex-col gap-4 md:flex-row md:gap-10 text-sm md:text-base font-medium">
-              <ContactLink
-                label="EMAIL"
-                href="mailto:rithikreddy680@gmail.com"
-                tooltip="+61 450 933 183"
-              />
               <ContactLink
                 label="LINKEDIN"
                 href="https://www.linkedin.com/in/rithik-reddy"
@@ -29,7 +55,7 @@ export function ContactSection() {
 
           <footer className="flex flex-col gap-2 text-xs text-black/60 md:flex-row md:items-center md:justify-between">
             <p>Designed &amp; engineered by Rithik Reddy.</p>
-            <p>Williams Landing, Australia · {new Date().getFullYear()}</p>
+            <p>Williams Landing, 3027 · Australia · {new Date().getFullYear()}</p>
           </footer>
         </div>
       </div>
@@ -40,10 +66,9 @@ export function ContactSection() {
 type ContactLinkProps = {
   label: string;
   href: string;
-  tooltip?: string;
 };
 
-function ContactLink({ label, href, tooltip }: ContactLinkProps) {
+function ContactLink({ label, href }: ContactLinkProps) {
   return (
     <a
       href={href}
@@ -56,11 +81,6 @@ function ContactLink({ label, href, tooltip }: ContactLinkProps) {
         <span className="absolute inset-x-0 bottom-0 h-[3px] origin-center scale-x-0 bg-black transition-transform duration-200 group-hover:scale-x-100" />
         <span className="absolute inset-x-0 bottom-2 h-[2px] bg-black/80 opacity-0 transition-opacity duration-150 group-hover:opacity-100" />
       </span>
-      {tooltip && (
-        <span className="pointer-events-none absolute left-1/2 top-full mt-3 -translate-x-1/2 whitespace-nowrap rounded-sm bg-black px-3 py-1 text-[0.65rem] font-medium uppercase tracking-[0.18em] text-white opacity-0 shadow-lg transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-          {tooltip}
-        </span>
-      )}
     </a>
   );
 }

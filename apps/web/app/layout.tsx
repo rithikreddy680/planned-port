@@ -3,6 +3,8 @@ import "./globals.css";
 import { sans, mono } from "./fonts";
 import { CursorSpotlight } from "@/components/motion/cursor-spotlight";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { CvButton } from "@/components/ui/cv-button";
 
 export const metadata: Metadata = {
   title: "Rithik Reddy | Portfolio",
@@ -28,6 +30,8 @@ export default function RootLayout({
 
             {/* Searchlight cursor */}
             <CursorSpotlight />
+            <ThemeToggle />
+            <CvButton />
 
             <div className="relative z-10">
               {children}
