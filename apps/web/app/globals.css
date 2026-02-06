@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Digital Noir – based on zinc scale */
+  --background: 240 10% 3.9%; /* #09090B */
+  --foreground: 0 0% 98%; /* #FAFAFA */
+
+  --card: 240 3.7% 15.9%; /* #18181B */
+  --card-foreground: 0 0% 98%;
+
+  --muted: 240 3.7% 15.9%; /* body surfaces */
+  --muted-foreground: 240 5% 64.9%; /* zinc-400 */
+
+  --border: 240 3.7% 15.9%; /* zinc-800ish */
+
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Inter Tight", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.04em;
+}
+
+.mono-label {
+  font-family: var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
