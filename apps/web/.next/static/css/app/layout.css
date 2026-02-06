@@ -588,6 +588,9 @@ video {
 .mt-\[6px\] {
   margin-top: 6px;
 }
+.block {
+  display: block;
+}
 .inline-block {
   display: inline-block;
 }

@@ -20,6 +20,9 @@ export function SmoothScroll({ children }: Props) {
       smoothTouch: false
     });
 
+    // Store on window for easy access (fallback)
+    (window as any).lenis = lenis;
+
     let frame: number;
 
     const raf = (time: number) => {
@@ -32,6 +35,7 @@ export function SmoothScroll({ children }: Props) {
     return () => {
       cancelAnimationFrame(frame);
       lenis.destroy();
+      delete (window as any).lenis;
     };
   }, []);
 

@@ -1,0 +1,16 @@
+{"location":"hero.tsx:button","message":"Button hover detected","data":{},"timestamp":1770395462190,"sessionId":"debug-session","runId":"run2","hypothesisId":"D"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Button clicked","data":{"timestamp":1770395462835},"timestamp":1770395462835,"sessionId":"debug-session","runId":"run2","hypothesisId":"A"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Projects section lookup","data":{"found":true,"id":"projects"},"timestamp":1770395462836,"sessionId":"debug-session","runId":"run2","hypothesisId":"B"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Lenis instance check","data":{"hasLenis":false},"timestamp":1770395462836,"sessionId":"debug-session","runId":"run2","hypothesisId":"C"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Lenis not available, using scrollIntoView","data":{},"timestamp":1770395462836,"sessionId":"debug-session","runId":"run2","hypothesisId":"C"}
+{"location":"hero.tsx:button","message":"Button hover detected","data":{},"timestamp":1770395465518,"sessionId":"debug-session","runId":"run2","hypothesisId":"D"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Button clicked","data":{"timestamp":1770395466147},"timestamp":1770395466147,"sessionId":"debug-session","runId":"run2","hypothesisId":"A"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Projects section lookup","data":{"found":true,"id":"projects"},"timestamp":1770395466147,"sessionId":"debug-session","runId":"run2","hypothesisId":"B"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Lenis instance check","data":{"hasLenis":false},"timestamp":1770395466147,"sessionId":"debug-session","runId":"run2","hypothesisId":"C"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Lenis not available, using scrollIntoView","data":{},"timestamp":1770395466147,"sessionId":"debug-session","runId":"run2","hypothesisId":"C"}
+{"location":"hero.tsx:button","message":"Button hover detected","data":{},"timestamp":1770395481055,"sessionId":"debug-session","runId":"run2","hypothesisId":"D"}
+{"location":"hero.tsx:button","message":"Button hover detected","data":{},"timestamp":1770395481341,"sessionId":"debug-session","runId":"run2","hypothesisId":"D"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Button clicked","data":{"timestamp":1770395481934},"timestamp":1770395481934,"sessionId":"debug-session","runId":"run2","hypothesisId":"A"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Projects section lookup","data":{"found":true,"id":"projects"},"timestamp":1770395481935,"sessionId":"debug-session","runId":"run2","hypothesisId":"B"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Lenis instance check","data":{"hasLenis":false},"timestamp":1770395481935,"sessionId":"debug-session","runId":"run2","hypothesisId":"C"}
+{"location":"hero.tsx:handleViewWorkClick","message":"Lenis not available, using scrollIntoView","data":{},"timestamp":1770395481935,"sessionId":"debug-session","runId":"run2","hypothesisId":"C"}

@@ -60,6 +60,18 @@ export function HeroSection() {
     my.set(0);
   };
 
+  const handleViewWorkClick = () => {
+    const projectsSection = document.getElementById('projects');
+    if (projectsSection) {
+      const lenis = (window as any).lenis;
+      if (lenis) {
+        lenis.scrollTo('#projects', { offset: 0, duration: 1.2 });
+      } else {
+        projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
   const splitHeadline = HOOK_HEADLINE.split("").map((char, index) => (
     <span
       key={`${char}-${index}`}
@@ -109,6 +121,7 @@ export function HeroSection() {
         <motion.button
           style={{ x: springX, y: springY }}
           className="relative inline-flex h-14 w-14 items-center justify-center rounded-full border border-foreground/60 bg-transparent text-[0.6rem] font-medium uppercase tracking-[0.2em] text-foreground/80 transition-colors hover:bg-foreground hover:text-background"
+          onClick={handleViewWorkClick}
         >
           <span className="pointer-events-none">View Work</span>
         </motion.button>
