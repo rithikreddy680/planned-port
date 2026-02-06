@@ -1,23 +1,20 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useThemeStore } from "@/hooks/use-theme-store";
 
 type Theme = "dark" | "light";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const theme = useThemeStore((s) => s.theme);
+  const setTheme = useThemeStore((s) => s.setTheme);
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("rr-theme");
-    if (stored === "light" || stored === "dark") {
-      applyTheme(stored);
-      setTheme(stored);
-      return;
-    }
-    // default to dark / Digital Noir
-    applyTheme("dark");
-    setTheme("dark");
-  }, []);
+    const stored = window.localStorage.getItem("rr-theme") as Theme | null;
+    const initial: Theme = stored === "light" || stored === "dark" ? stored : "dark";
+    applyTheme(initial);
+    setTheme(initial);
+  }, [setTheme]);
 
   const applyTheme = (mode: Theme) => {
     const root = document.documentElement;
@@ -48,4 +45,5 @@ export function ThemeToggle() {
     </button>
   );
 }
+
 

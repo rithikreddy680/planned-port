@@ -7,8 +7,9 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { CvButton } from "@/components/ui/cv-button";
 
 export const metadata: Metadata = {
-  title: "Rithik Reddy | Portfolio",
-  description: "Building Scalable Logic."
+  title: "Rithik Reddy | Full Stack Software Engineer",
+  description:
+    "Portfolio of Rithik Reddy, a Software Engineering student at Monash University specialising in scalable logic, Next.js and SAP S/4HANA."
 };
 
 export default function RootLayout({
@@ -17,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
+    <html lang="en" className={`dark ${sans.variable} ${mono.variable}`}>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <SmoothScroll>
           <div className="relative min-h-screen overflow-hidden">

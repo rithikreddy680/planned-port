@@ -48,6 +48,12 @@ body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: var(--font-sans);
+  transition: background-color 500ms ease-in-out, color 500ms ease-in-out;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 h1,

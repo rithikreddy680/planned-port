@@ -9,8 +9,13 @@ type Props = {
 
 export function SmoothScroll({ children }: Props) {
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
     const lenis = new Lenis({
-      lerp: 0.08,
+      lerp: 0.1,
+      duration: 1.2,
       smoothWheel: true,
       smoothTouch: false
     });
@@ -30,6 +35,6 @@ export function SmoothScroll({ children }: Props) {
     };
   }, []);
 
-    return <>{children}</>;
+  return <>{children}</>;
 }
 
