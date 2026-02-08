@@ -102,16 +102,31 @@ export function HeroSection({ scrollY = 0 }: HeroSectionProps) {
       <div className="relative z-10 flex min-h-screen flex-col justify-between px-6 py-10 md:px-12 lg:px-20">
         {/* Header: name + title – left-aligned text, block on the right */}
         <header
-          className="ml-auto max-w-xl text-left"
+          className="relative ml-auto max-w-xl overflow-visible text-left px-5 py-3"
           style={{ fontFamily: "var(--font-geist-mono), monospace" }}
         >
-          <h1 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl md:text-[2.5rem]">
-            RITHIK REDDY
-          </h1>
-          <p className="mt-2 text-base font-bold tracking-tight text-zinc-200 md:mt-3 md:text-lg">
-            Software and Computer Science Engineer
-          </p>
-          <div className="mt-4 h-px w-12 bg-white/20" />
+          {/* White bar arrives later from the right and extends past the page */}
+          <motion.div
+            className="absolute inset-y-0 left-0 bg-white"
+            style={{ width: "calc(100% + 140vw)" }}
+            initial={{ x: "100%" }}
+            animate={{ x: "0%" }}
+            transition={{ duration: 1.0, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            aria-hidden
+          />
+          <motion.div
+            className="relative z-10"
+            initial={{ color: "#ffffff" }}
+            animate={{ color: "#000000" }}
+            transition={{ duration: 0.6, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <h1 className="text-3xl font-black tracking-tight text-current sm:text-4xl md:text-[2.5rem]">
+              RITHIK REDDY
+            </h1>
+            <p className="mt-2 text-base font-bold tracking-tight text-current/80 md:mt-3 md:text-lg">
+              Software and Computer Science Engineer
+            </p>
+          </motion.div>
         </header>
 
         {/* View Work – small, dimmed, bounces across header */}
