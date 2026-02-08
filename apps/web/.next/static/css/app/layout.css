@@ -561,6 +561,9 @@ video {
 .top-full {
   top: 100%;
 }
+.-left-1\/2 {
+  left: -50%;
+}
 .-z-20 {
   z-index: -20;
 }
@@ -604,6 +607,9 @@ video {
 .ml-auto {
   margin-left: auto;
 }
+.mt-0 {
+  margin-top: 0px;
+}
 .mt-1 {
   margin-top: 0.25rem;
 }
@@ -615,12 +621,6 @@ video {
 }
 .mt-6 {
   margin-top: 1.5rem;
-}
-.mt-0\.5 {
-  margin-top: 0.125rem;
-}
-.mt-0 {
-  margin-top: 0px;
 }
 .block {
   display: block;
@@ -705,6 +705,9 @@ video {
 }
 .w-full {
   width: 100%;
+}
+.w-1\/2 {
+  width: 50%;
 }
 .min-w-\[10ch\] {
   min-width: 10ch;
@@ -874,6 +877,9 @@ video {
 .rounded-sm {
   border-radius: 0;
 }
+.rounded-md {
+  border-radius: 0.125rem;
+}
 .border {
   border-width: 1px;
 }
@@ -891,9 +897,6 @@ video {
 }
 .border-foreground\/60 {
   border-color: hsl(var(--foreground) / 0.6);
-}
-.border-white\/90 {
-  border-color: rgb(255 255 255 / 0.9);
 }
 .border-foreground\/90 {
   border-color: hsl(var(--foreground) / 0.9);
@@ -932,18 +935,15 @@ video {
 .bg-foreground {
   background-color: hsl(var(--foreground));
 }
+.bg-foreground\/90 {
+  background-color: hsl(var(--foreground) / 0.9);
+}
 .bg-muted-foreground\/50 {
   background-color: hsl(var(--muted-foreground) / 0.5);
 }
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
-}
-.bg-white\/90 {
-  background-color: rgb(255 255 255 / 0.9);
-}
-.bg-foreground\/90 {
-  background-color: hsl(var(--foreground) / 0.9);
 }
 .bg-\[radial-gradient\(600px_circle_at_var\(--pointer-x\2c _50\%\)_var\(--pointer-y\2c _50\%\)\2c rgba\(255\2c 255\2c 255\2c 0\.06\)\2c transparent_40\%\)\] {
   background-image: radial-gradient(600px circle at var(--pointer-x, 50%) var(--pointer-y, 50%),rgba(255,255,255,0.06),transparent 40%);
@@ -1070,10 +1070,6 @@ video {
 .text-\[clamp\(0\.9rem\2c 1\.1vw\2c 1\.3rem\)\] {
   font-size: clamp(0.9rem, 1.1vw, 1.3rem);
 }
-.text-base {
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -1087,9 +1083,6 @@ video {
 }
 .font-bold {
   font-weight: 700;
-}
-.font-extrabold {
-  font-weight: 800;
 }
 .uppercase {
   text-transform: uppercase;
@@ -1425,18 +1418,6 @@ body::-webkit-scrollbar {
 }
 @media (min-width: 768px) {
 
-  .md\:mt-3 {
-    margin-top: 0.75rem;
-  }
-
-  .md\:mt-2 {
-    margin-top: 0.5rem;
-  }
-
-  .md\:mt-1 {
-    margin-top: 0.25rem;
-  }
-
   .md\:mt-0\.5 {
     margin-top: 0.125rem;
   }
@@ -1527,11 +1508,6 @@ body::-webkit-scrollbar {
   .md\:text-base {
     font-size: 1rem;
     line-height: 1.5rem;
-  }
-
-  .md\:text-lg {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
   }
 
   .md\:text-sm {

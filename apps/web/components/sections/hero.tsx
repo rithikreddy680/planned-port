@@ -158,13 +158,39 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
         >
           {/* White bar arrives later from the right and extends past the page */}
           <motion.div
-            className="absolute inset-y-0 left-0 bg-foreground/90"
-            style={{ width: "calc(100% + 140vw)" }}
-            initial={{ x: "100%" }}
-            animate={{ x: "0%" }}
-            transition={{ duration: 1.0, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-y-0 left-0 overflow-hidden rounded-md"
+            style={{
+              width: "calc(100% + 140vw)",
+              backgroundImage:
+                "linear-gradient(90deg, hsl(var(--foreground) / 0.95) 0%, hsl(var(--foreground) / 0.9) 65%, hsl(var(--foreground) / 0) 100%)"
+            }}
+            initial={{ x: "120%", opacity: 0, boxShadow: "0 0 0 rgba(255,255,255,0)" }}
+            animate={{
+              x: ["120%", "0%", "-1%"],
+              opacity: [0, 1, 1],
+              boxShadow: [
+                "0 0 0 rgba(255,255,255,0)",
+                "0 0 28px rgba(255,255,255,0.35)",
+                "0 0 0 rgba(255,255,255,0)"
+              ]
+            }}
+            transition={{ duration: 1.3, delay: 0.35, ease: [0.22, 1, 0.36, 1], times: [0, 0.85, 1] }}
             aria-hidden
-          />
+          >
+            {/* Glass Pulse */}
+            <motion.div
+              className="absolute inset-0"
+              style={{
+                backgroundImage:
+                  "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 100%)",
+                filter: "blur(2px)",
+                mixBlendMode: "screen"
+              }}
+              animate={{ x: ["-20%", "120%"], opacity: [0.15, 0.9, 0.15] }}
+              transition={{ duration: 2.2, ease: "easeInOut", repeat: Infinity }}
+              aria-hidden
+            />
+          </motion.div>
           <motion.div
             className="relative z-10"
             initial={{ color: "#ffffff" }}
