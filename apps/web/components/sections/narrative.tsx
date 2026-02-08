@@ -22,9 +22,15 @@ export function NarrativeSection() {
   return (
     <section
       id="experience"
-      className="relative min-h-screen px-6 py-16 md:px-12 lg:px-20"
+      className="relative min-h-screen w-full bg-background px-6 py-16 md:px-12 lg:px-20"
+      aria-label="Experience"
     >
-      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2">
+      {/* Command Centre section */}
+      <div
+        className="pointer-events-none absolute left-0 right-0 top-0 z-10 h-40 bg-gradient-to-b from-black/40 to-transparent"
+        aria-hidden
+      />
+      <div className="relative z-0 mx-auto grid min-h-0 max-w-6xl grid-rows-1 gap-12 lg:grid-cols-2">
         {/* Left: Controller – sticky list */}
         <aside className="relative">
           <div className="sticky top-28 space-y-1">
@@ -58,7 +64,7 @@ export function NarrativeSection() {
         </aside>
 
         {/* Right: Display – scrollable cards with snap */}
-        <div className="max-h-[80vh] overflow-y-auto snap-y snap-mandatory scroll-smooth md:max-h-[70vh]">
+        <div className="min-h-0 max-h-[80vh] overflow-y-auto snap-y snap-mandatory scroll-smooth md:max-h-[70vh]">
           {experiences.map((exp, index) => (
             <article
               key={exp.company}

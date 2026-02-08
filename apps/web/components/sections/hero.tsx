@@ -5,8 +5,13 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 
 const HEADLINE_WORDS = ["BUILDING", "SCALABLE", "LOGIC"];
 
-export function HeroSection() {
+type HeroSectionProps = {
+  scrollY?: number;
+};
+
+export function HeroSection({ scrollY = 0 }: HeroSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const parallaxOffset = scrollY * 0.2;
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const springX = useSpring(mx, { stiffness: 420, damping: 18 });
@@ -51,9 +56,10 @@ export function HeroSection() {
       ref={containerRef}
       className="relative flex min-h-screen flex-col overflow-hidden"
     >
-      {/* Typographic poster: stacked headline as background */}
+      {/* Typographic poster: stacked headline (parallax 1.2x) */}
       <div
-        className="pointer-events-none absolute inset-0 flex flex-col justify-center pl-[8vw]"
+        className="pointer-events-none absolute inset-0 flex flex-col justify-center pl-[8vw] will-change-transform"
+        style={{ transform: `translate3d(0, ${-parallaxOffset}px, 0)` }}
         aria-hidden
       >
         {HEADLINE_WORDS.map((word) => (

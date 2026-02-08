@@ -1,4 +1,4 @@
-import { HeroSection } from "@/components/sections/hero";
+import { HeroRevealWrapper } from "@/components/sections/hero-reveal-wrapper";
 import { NarrativeSection } from "@/components/sections/narrative";
 import { ProjectsSection } from "@/components/sections/projects";
 import { SkillsSection } from "@/components/sections/skills";
@@ -7,11 +7,13 @@ import { ContactSection } from "@/components/sections/contact";
 export default function HomePage() {
   return (
     <main className="relative">
-      <HeroSection />
+      <HeroRevealWrapper />
       <NarrativeSection />
-      <ProjectsSection />
-      <SkillsSection />
-      <ContactSection />
+      <div className="relative bg-background">
+        <ProjectsSection />
+        <SkillsSection />
+        <ContactSection />
+      </div>
     </main>
   );
 }
