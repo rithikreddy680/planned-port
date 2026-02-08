@@ -25,9 +25,10 @@ const headlineWord = {
 
 type HeroSectionProps = {
   scrollY?: number;
+  onViewWork?: () => void;
 };
 
-export function HeroSection({ scrollY = 0 }: HeroSectionProps) {
+export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const parallaxOffset = scrollY * 0.2;
   const mx = useMotionValue(0);
@@ -62,6 +63,10 @@ export function HeroSection({ scrollY = 0 }: HeroSectionProps) {
   };
 
   const scrollToProjects = () => {
+    if (onViewWork) {
+      onViewWork();
+      return;
+    }
     const el = document.getElementById("projects");
     if (el) {
       (window as unknown as { lenis?: { scrollTo: (t: string, o: { offset: number; duration: number }) => void } }).lenis?.scrollTo?.("#projects", { offset: 0, duration: 1.2 });
@@ -140,14 +145,17 @@ export function HeroSection({ scrollY = 0 }: HeroSectionProps) {
               data-magnetic-btn
               style={{ x: springX, y: springY }}
               onClick={scrollToProjects}
-              className="group relative flex aspect-square h-[100px] w-[100px] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/90 bg-white/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:border-black hover:bg-black hover:text-white hover:shadow-[0_0_32px_rgba(255,255,255,0.25)] md:h-[120px] md:w-[120px]"
+              className="group relative flex aspect-square h-[190px] w-[190px] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/90 bg-white/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-[0_0_60px_rgba(255,255,255,0.85)] focus:outline-none focus-visible:outline-none focus-visible:ring-0 md:h-[228px] md:w-[228px]"
               whileHover={{ scale: 1.1 }}
             >
               <span
-                className="font-architect text-[0.55rem] font-bold tracking-[0.18em] group-hover:animate-spin-slow md:text-[0.65rem]"
-                style={{ fontFamily: "var(--font-geist-mono), monospace" }}
+                className="font-architect normal-case text-[1.045rem] font-bold tracking-[0.18em] group-hover:animate-spin-slow md:text-[1.236rem]"
+                style={{
+                  fontFamily: "var(--font-geist-mono), monospace",
+                  textTransform: "none"
+                }}
               >
-                VIEW WORK
+                View Work
               </span>
             </motion.button>
           </div>

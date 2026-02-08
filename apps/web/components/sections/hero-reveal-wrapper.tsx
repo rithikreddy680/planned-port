@@ -6,6 +6,11 @@ import { HeroSection } from "./hero";
 const WHEEL_SPEED = 1.2; // header lift per wheel delta
 const TOP_LOCK_EPS = 2; // px tolerance to avoid jitter at top
 const OVERSCROLL_THRESHOLD = 180; // px of "pull past top" required to reactivate cover
+const COVER_OFF_DURATION = 999; // ms for click-to-open animation
+
+function easePower3Out(t: number): number {
+  return 1 - (1 - t) * (1 - t) * (1 - t);
+}
 
 declare global {
   interface Window {
@@ -30,6 +35,7 @@ export function HeroRevealWrapper() {
   const coverActiveRef = useRef(coverActive);
   const overscrollRef = useRef(0);
   const overscrollAttemptsRef = useRef(0);
+  const isCoverAnimatingRef = useRef(false);
   vhRef.current = vh;
   headerLiftRef.current = headerLift;
   coverActiveRef.current = coverActive;
@@ -74,6 +80,7 @@ export function HeroRevealWrapper() {
         }
         return;
       }
+      if (isCoverAnimatingRef.current) return;
       overscrollRef.current = 0;
       overscrollAttemptsRef.current = 0;
       const currentVh = vhRef.current;
@@ -116,6 +123,26 @@ export function HeroRevealWrapper() {
   // Header cover: lifted by wheel input, then snaps out and unlocks page scroll
   const translateY = coverActive ? -headerLift : -vh;
   const heroScrollY = coverActive ? headerLift : 0;
+  const handleViewWork = () => {
+    if (!coverActiveRef.current || isCoverAnimatingRef.current) return;
+    isCoverAnimatingRef.current = true;
+    const start = headerLiftRef.current;
+    const target = vhRef.current;
+    const startT = performance.now();
+    const animate = (now: number) => {
+      const t = Math.min((now - startT) / COVER_OFF_DURATION, 1);
+      const eased = easePower3Out(t);
+      const next = start + (target - start) * eased;
+      setHeaderLift(next);
+      if (t < 1) requestAnimationFrame(animate);
+      else {
+        setHeaderLift(target);
+        setCoverActive(false);
+        isCoverAnimatingRef.current = false;
+      }
+    };
+    requestAnimationFrame(animate);
+  };
 
   return (
     <>
@@ -127,7 +154,7 @@ export function HeroRevealWrapper() {
         }}
         aria-hidden={!coverActive}
       >
-        <HeroSection scrollY={heroScrollY} />
+        <HeroSection scrollY={heroScrollY} onViewWork={handleViewWork} />
       </div>
     </>
   );
