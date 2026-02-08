@@ -174,8 +174,8 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
             <h1 className="text-3xl font-black tracking-tight text-current sm:text-4xl md:text-[2.5rem]">
               RITHIK REDDY
             </h1>
-            <p className="mt-2 text-base font-bold tracking-tight text-current/80 md:mt-3 md:text-lg">
-              Software and Computer Science Engineer
+            <p className="mt-0 text-sm font-bold tracking-tight text-current/80 md:mt-0.5 md:text-base">
+              An Engineer by Profession, A Reverse Engineer by Nature.
             </p>
           </motion.div>
         </header>
