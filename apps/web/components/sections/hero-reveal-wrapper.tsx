@@ -5,6 +5,7 @@ import { HeroSection } from "./hero";
 
 const WHEEL_SPEED = 1.2; // header lift per wheel delta
 const TOP_LOCK_EPS = 2; // px tolerance to avoid jitter at top
+const OVERSCROLL_THRESHOLD = 180; // px of "pull past top" required to reactivate cover
 
 declare global {
   interface Window {
@@ -27,6 +28,8 @@ export function HeroRevealWrapper() {
   const vhRef = useRef(vh);
   const headerLiftRef = useRef(headerLift);
   const coverActiveRef = useRef(coverActive);
+  const overscrollRef = useRef(0);
+  const overscrollAttemptsRef = useRef(0);
   vhRef.current = vh;
   headerLiftRef.current = headerLift;
   coverActiveRef.current = coverActive;
@@ -49,8 +52,30 @@ export function HeroRevealWrapper() {
     };
 
     const onWheel = (e: WheelEvent) => {
-      if (!coverActiveRef.current) return;
       if (!atTop()) return;
+      // If cover is inactive, only reactivate on "overscroll up"
+      if (!coverActiveRef.current) {
+        if (e.deltaY < 0) {
+          overscrollRef.current += Math.abs(e.deltaY);
+          e.preventDefault();
+          if (overscrollRef.current >= OVERSCROLL_THRESHOLD) {
+            overscrollRef.current = 0;
+            overscrollAttemptsRef.current += 1;
+            if (overscrollAttemptsRef.current >= 2) {
+              overscrollAttemptsRef.current = 0;
+              window.scrollTo(0, 0);
+              setHeaderLift(0);
+              setCoverActive(true);
+            }
+          }
+        } else {
+          overscrollRef.current = 0;
+          overscrollAttemptsRef.current = 0;
+        }
+        return;
+      }
+      overscrollRef.current = 0;
+      overscrollAttemptsRef.current = 0;
       const currentVh = vhRef.current;
       let next = headerLiftRef.current + e.deltaY * WHEEL_SPEED;
       if (next >= currentVh) {

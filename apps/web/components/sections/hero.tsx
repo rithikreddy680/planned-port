@@ -4,6 +4,24 @@ import { useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 const HEADLINE_WORDS = ["BUILDING", "SCALABLE", "LOGIC"];
+const headlineContainer = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.15
+    }
+  }
+};
+const headlineWord = {
+  hidden: { opacity: 0, y: 24, filter: "blur(8px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] }
+  }
+};
 
 type HeroSectionProps = {
   scrollY?: number;
@@ -57,14 +75,18 @@ export function HeroSection({ scrollY = 0 }: HeroSectionProps) {
       className="relative flex min-h-screen flex-col overflow-hidden"
     >
       {/* Typographic poster: stacked headline (parallax 1.2x) */}
-      <div
+      <motion.div
         className="pointer-events-none absolute inset-0 flex flex-col justify-center pl-[8vw] will-change-transform"
-        style={{ transform: `translate3d(0, ${-parallaxOffset}px, 0)` }}
+        style={{ y: -parallaxOffset }}
+        variants={headlineContainer}
+        initial="hidden"
+        animate="show"
         aria-hidden
       >
         {HEADLINE_WORDS.map((word) => (
-          <span
+          <motion.span
             key={word}
+            variants={headlineWord}
             className="font-black uppercase leading-[0.8] text-foreground/90"
             style={{
               fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
@@ -72,9 +94,9 @@ export function HeroSection({ scrollY = 0 }: HeroSectionProps) {
             }}
           >
             {word}
-          </span>
+          </motion.span>
         ))}
-      </div>
+      </motion.div>
 
       {/* Identity overlay – z-10 */}
       <div className="relative z-10 flex min-h-screen flex-col justify-between px-6 py-10 md:px-12 lg:px-20">
