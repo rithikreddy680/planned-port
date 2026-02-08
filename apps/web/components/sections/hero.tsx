@@ -1,9 +1,12 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 
-const HEADLINE_WORDS = ["BUILDING", "SCALABLE", "LOGIC"];
+const ROLLING_WORDS = ["SCALABLE", "COGNITIVE", "RECURSIVE", "RESILIENT", "ADAPTIVE", "HEURISTIC"];
+const ROLL_INTERVAL_MS = 1700;
+const ROLL_WORD_HEIGHT_EM = 0.8;
+const ROLL_ANIM_DURATION = 0.45;
 const headlineContainer = {
   hidden: {},
   show: {
@@ -35,6 +38,14 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
   const my = useMotionValue(0);
   const springX = useSpring(mx, { stiffness: 420, damping: 18 });
   const springY = useSpring(my, { stiffness: 420, damping: 18 });
+  const [rollingIndex, setRollingIndex] = useState(0);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setRollingIndex((prev) => (prev + 1) % ROLLING_WORDS.length);
+    }, ROLL_INTERVAL_MS);
+    return () => window.clearInterval(id);
+  }, []);
 
   const handleMagnetic = (e: React.MouseEvent<HTMLDivElement>) => {
     const btn = document.querySelector("[data-magnetic-btn]");
@@ -88,19 +99,54 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
         animate="show"
         aria-hidden
       >
-        {HEADLINE_WORDS.map((word) => (
-          <motion.span
-            key={word}
-            variants={headlineWord}
-            className="font-black uppercase leading-[0.8] text-foreground/90"
-            style={{
-              fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
-              fontSize: "12vw"
-            }}
+        <motion.span
+          variants={headlineWord}
+          className="font-black uppercase leading-[0.8] text-foreground/90"
+          style={{
+            fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
+            fontSize: "12vw"
+          }}
+        >
+          BUILDING
+        </motion.span>
+        <motion.span
+          variants={headlineWord}
+          className="font-black uppercase leading-[0.8] text-foreground/90"
+          style={{
+            fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
+            fontSize: "12vw"
+          }}
+        >
+          <span
+            className="relative inline-block overflow-hidden align-baseline min-w-[10ch] whitespace-nowrap"
+            style={{ height: `${ROLL_WORD_HEIGHT_EM}em` }}
           >
-            {word}
-          </motion.span>
-        ))}
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={ROLLING_WORDS[rollingIndex]}
+                className="absolute left-0 top-0 block w-full whitespace-nowrap leading-[0.8]"
+                style={{ height: `${ROLL_WORD_HEIGHT_EM}em` }}
+                initial={{ y: `${ROLL_WORD_HEIGHT_EM}em`, opacity: 0 }}
+                animate={{ y: "0em", opacity: 1 }}
+                exit={{ y: `-${ROLL_WORD_HEIGHT_EM}em`, opacity: 0 }}
+                transition={{ duration: ROLL_ANIM_DURATION, ease: [0.22, 1, 0.36, 1] }}
+                aria-hidden
+              >
+                {ROLLING_WORDS[rollingIndex]}
+              </motion.span>
+            </AnimatePresence>
+          </span>
+        </motion.span>
+        <motion.span
+          variants={headlineWord}
+          className="font-black uppercase leading-[0.8] text-foreground/90"
+          style={{
+            fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
+            fontSize: "12vw"
+          }}
+        >
+          LOGIC
+        </motion.span>
       </motion.div>
 
       {/* Identity overlay – z-10 */}
@@ -145,11 +191,11 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
               data-magnetic-btn
               style={{ x: springX, y: springY }}
               onClick={scrollToProjects}
-              className="group relative flex aspect-square h-[190px] w-[190px] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/90 bg-white/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-[0_0_60px_rgba(255,255,255,0.85)] focus:outline-none focus-visible:outline-none focus-visible:ring-0 md:h-[228px] md:w-[228px]"
+              className="group relative flex aspect-square h-[clamp(140px,14vw,260px)] w-[clamp(140px,14vw,260px)] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/90 bg-white/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-[0_0_60px_rgba(255,255,255,0.85)] focus:outline-none focus-visible:outline-none focus-visible:ring-0"
               whileHover={{ scale: 1.1 }}
             >
               <span
-                className="font-architect normal-case text-[1.045rem] font-bold tracking-[0.18em] group-hover:animate-spin-slow md:text-[1.236rem]"
+                className="font-architect normal-case text-[clamp(0.9rem,1.1vw,1.3rem)] font-bold tracking-[0.18em] group-hover:animate-spin-slow"
                 style={{
                   fontFamily: "var(--font-geist-mono), monospace",
                   textTransform: "none"
