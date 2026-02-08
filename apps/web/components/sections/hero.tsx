@@ -158,7 +158,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
         >
           {/* White bar arrives later from the right and extends past the page */}
           <motion.div
-            className="absolute inset-y-0 left-0 bg-white"
+            className="absolute inset-y-0 left-0 bg-foreground/90"
             style={{ width: "calc(100% + 140vw)" }}
             initial={{ x: "100%" }}
             animate={{ x: "0%" }}
@@ -171,7 +171,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
             animate={{ color: "#000000" }}
             transition={{ duration: 0.6, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h1 className="text-3xl font-black tracking-tight text-current sm:text-4xl md:text-[2.5rem]">
+            <h1 className="text-3xl font-bold tracking-tight text-current sm:text-4xl md:text-[2.5rem]">
               RITHIK REDDY
             </h1>
             <p className="mt-0 text-sm font-bold tracking-tight text-current/80 md:mt-0.5 md:text-base">
@@ -191,7 +191,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
               data-magnetic-btn
               style={{ x: springX, y: springY }}
               onClick={scrollToProjects}
-              className="group relative flex aspect-square h-[clamp(140px,14vw,260px)] w-[clamp(140px,14vw,260px)] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/90 bg-white/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-[0_0_60px_rgba(255,255,255,0.85)] focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+              className="group relative flex aspect-square h-[clamp(140px,14vw,260px)] w-[clamp(140px,14vw,260px)] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-foreground/90 bg-foreground/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-[0_0_60px_rgba(255,255,255,0.85)] focus:outline-none focus-visible:outline-none focus-visible:ring-0"
               whileHover={{ scale: 1.1 }}
             >
               <span

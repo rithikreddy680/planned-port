@@ -895,6 +895,9 @@ video {
 .border-white\/90 {
   border-color: rgb(255 255 255 / 0.9);
 }
+.border-foreground\/90 {
+  border-color: hsl(var(--foreground) / 0.9);
+}
 .bg-background {
   background-color: hsl(var(--background));
 }
@@ -938,6 +941,9 @@ video {
 }
 .bg-white\/90 {
   background-color: rgb(255 255 255 / 0.9);
+}
+.bg-foreground\/90 {
+  background-color: hsl(var(--foreground) / 0.9);
 }
 .bg-\[radial-gradient\(600px_circle_at_var\(--pointer-x\2c _50\%\)_var\(--pointer-y\2c _50\%\)\2c rgba\(255\2c 255\2c 255\2c 0\.06\)\2c transparent_40\%\)\] {
   background-image: radial-gradient(600px circle at var(--pointer-x, 50%) var(--pointer-y, 50%),rgba(255,255,255,0.06),transparent 40%);
@@ -1081,6 +1087,9 @@ video {
 }
 .font-bold {
   font-weight: 700;
+}
+.font-extrabold {
+  font-weight: 800;
 }
 .uppercase {
   text-transform: uppercase;
