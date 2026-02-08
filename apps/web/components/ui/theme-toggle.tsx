@@ -38,7 +38,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      className="fixed right-4 top-4 z-50 flex h-8 items-center rounded-sm border border-border/70 bg-background/80 px-3 text-[0.65rem] font-medium tracking-[0.18em] text-muted-foreground backdrop-blur-md"
+      className="font-architect fixed right-4 top-4 z-50 flex h-8 items-center rounded-sm border border-border/70 bg-background/80 px-3 text-[0.7rem] text-muted-foreground backdrop-blur-md"
       aria-label="Toggle theme"
     >
       {label}

@@ -1,54 +1,32 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
-const HOOK_HEADLINE = "BUILDING SCALABLE LOGIC";
+const HEADLINE_WORDS = ["BUILDING", "SCALABLE", "LOGIC"];
 
 export function HeroSection() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const textRef = useRef<HTMLDivElement | null>(null);
-
+  const containerRef = useRef<HTMLDivElement>(null);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const springX = useSpring(mx, { stiffness: 300, damping: 25 });
-  const springY = useSpring(my, { stiffness: 300, damping: 25 });
+  const springX = useSpring(mx, { stiffness: 420, damping: 18 });
+  const springY = useSpring(my, { stiffness: 420, damping: 18 });
 
-  // Character-by-character reveal
-  useEffect(() => {
-    if (!textRef.current) return;
-
-    const letters = textRef.current.querySelectorAll<HTMLSpanElement>("[data-char]");
-
-    gsap.set(letters, { y: "100%", opacity: 0 });
-
-    gsap.to(letters, {
-      y: "0%",
-      opacity: 1,
-      duration: 0.6,
-      ease: "power3.out",
-      stagger: 0.05
-    });
-  }, []);
-
-  const handleMagnetic = (event: React.MouseEvent<HTMLDivElement>) => {
-    const section = containerRef.current;
-    if (!section) return;
-
-    const rect = section.getBoundingClientRect();
+  const handleMagnetic = (e: React.MouseEvent<HTMLDivElement>) => {
+    const btn = document.querySelector("[data-magnetic-btn]");
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height - 80; // approx button position
-
-    const distanceX = event.clientX - centerX;
-    const distanceY = event.clientY - centerY;
-    const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
-
-    const magnetRadius = 140;
+    const centerY = rect.top + rect.height / 2;
+    const dx = e.clientX - centerX;
+    const dy = e.clientY - centerY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const magnetRadius = 705;
     if (distance < magnetRadius) {
       const strength = (magnetRadius - distance) / magnetRadius;
-      mx.set(distanceX * 0.35 * strength);
-      my.set(distanceY * 0.35 * strength);
+      const pull = Math.min(1.15 * strength, 1);
+      mx.set(dx * pull);
+      my.set(dy * pull);
     } else {
       mx.set(0);
       my.set(0);
@@ -60,73 +38,78 @@ export function HeroSection() {
     my.set(0);
   };
 
-  const handleViewWorkClick = () => {
-    const projectsSection = document.getElementById('projects');
-    if (projectsSection) {
-      const lenis = (window as any).lenis;
-      if (lenis) {
-        lenis.scrollTo('#projects', { offset: 0, duration: 1.2 });
-      } else {
-        projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+  const scrollToProjects = () => {
+    const el = document.getElementById("projects");
+    if (el) {
+      (window as unknown as { lenis?: { scrollTo: (t: string, o: { offset: number; duration: number }) => void } }).lenis?.scrollTo?.("#projects", { offset: 0, duration: 1.2 });
+      if (!(window as unknown as { lenis?: unknown }).lenis) el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
-
-  const splitHeadline = HOOK_HEADLINE.split("").map((char, index) => (
-    <span
-      key={`${char}-${index}`}
-      data-char
-      className="inline-block overflow-hidden align-bottom"
-    >
-      <span className="inline-block will-change-transform">
-        {char === " " ? "\u00A0" : char}
-      </span>
-    </span>
-  ));
 
   return (
     <section
       ref={containerRef}
-      className="relative flex min-h-screen flex-col justify-between px-6 py-8 md:px-12 lg:px-20"
+      className="relative flex min-h-screen flex-col overflow-hidden"
     >
-      <header className="flex items-start justify-between text-xs text-muted-foreground">
-        <div className="mono-label">RITHIK REDDY</div>
-        <div className="mono-label">FULL STACK ENGINEER</div>
-      </header>
-
-      <div className="flex flex-1 items-center justify-center">
-        <div className="max-w-5xl text-center space-y-6">
-          <p className="mono-label text-muted-foreground">
-            PORTFOLIO · DIGITAL NOIR · V2026
-          </p>
-          <div
-            ref={textRef}
-            className="mx-auto max-w-5xl text-balance text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold leading-tight tracking-tightest"
+      {/* Typographic poster: stacked headline as background */}
+      <div
+        className="pointer-events-none absolute inset-0 flex flex-col justify-center pl-[8vw]"
+        aria-hidden
+      >
+        {HEADLINE_WORDS.map((word) => (
+          <span
+            key={word}
+            className="font-black uppercase leading-[0.8] text-foreground/90"
+            style={{
+              fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
+              fontSize: "12vw"
+            }}
           >
-            {splitHeadline}
-          </div>
-          <p className="mx-auto max-w-2xl text-sm md:text-base text-muted-foreground">
-            Student Software Engineer at Monash University, designing scalable systems
-            and motion-driven interfaces that turn complex technical problems into
-            clear, cinematic experiences.
-          </p>
-        </div>
+            {word}
+          </span>
+        ))}
       </div>
 
-      <div
-        className="flex justify-center pb-8 md:pb-10"
-        onMouseMove={handleMagnetic}
-        onMouseLeave={resetMagnetic}
-      >
-        <motion.button
-          style={{ x: springX, y: springY }}
-          className="relative inline-flex h-14 w-14 items-center justify-center rounded-full border border-foreground/60 bg-transparent text-[0.6rem] font-medium uppercase tracking-[0.2em] text-foreground/80 transition-colors hover:bg-foreground hover:text-background"
-          onClick={handleViewWorkClick}
+      {/* Identity overlay – z-10 */}
+      <div className="relative z-10 flex min-h-screen flex-col justify-between px-6 py-10 md:px-12 lg:px-20">
+        {/* Header: name + title – left-aligned text, block on the right */}
+        <header
+          className="ml-auto max-w-xl text-left"
+          style={{ fontFamily: "var(--font-geist-mono), monospace" }}
         >
-          <span className="pointer-events-none">View Work</span>
-        </motion.button>
+          <h1 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl md:text-[2.5rem]">
+            RITHIK REDDY
+          </h1>
+          <p className="mt-2 text-base font-bold tracking-tight text-zinc-200 md:mt-3 md:text-lg">
+            Software and Computer Science Engineer
+          </p>
+          <div className="mt-4 h-px w-12 bg-white/20" />
+        </header>
+
+        {/* View Work – small, dimmed, bounces across header */}
+        <div
+          className="absolute inset-0 flex items-end justify-end pb-8 pr-4 pt-20 md:pb-10 md:pr-6"
+          onMouseMove={handleMagnetic}
+          onMouseLeave={resetMagnetic}
+        >
+          <div className="animate-float">
+            <motion.button
+              data-magnetic-btn
+              style={{ x: springX, y: springY }}
+              onClick={scrollToProjects}
+              className="group relative flex aspect-square h-[100px] w-[100px] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/90 bg-white/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:border-black hover:bg-black hover:text-white hover:shadow-[0_0_32px_rgba(255,255,255,0.25)] md:h-[120px] md:w-[120px]"
+              whileHover={{ scale: 1.1 }}
+            >
+              <span
+                className="font-architect text-[0.55rem] font-bold tracking-[0.18em] group-hover:animate-spin-slow md:text-[0.65rem]"
+                style={{ fontFamily: "var(--font-geist-mono), monospace" }}
+              >
+                VIEW WORK
+              </span>
+            </motion.button>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
-

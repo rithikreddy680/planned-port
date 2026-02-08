@@ -1,14 +1,19 @@
-import { Inter_Tight as InterTight, JetBrains_Mono as JetBrainsMono } from "next/font/google";
+import { DM_Sans } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 
-export const sans = InterTight({
+/**
+ * Aeonik-style structure: one geometric sans used in three "voices".
+ */
+export const aeonik = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap"
+  weight: ["400", "500", "700", "800", "900"],
+  variable: "--font-aeonik",
+  display: "swap",
 });
 
-export const mono = JetBrainsMono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap"
-});
+/** Hero headline + footer: Geist Sans */
+export const geistSans = GeistSans;
 
+/** Hero name + footer watermark: Geist Mono */
+export const geistMono = GeistMono;

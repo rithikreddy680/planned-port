@@ -34,31 +34,66 @@ export const projects: Project[] = [
   {
     id: "skilltree",
     title: "Skilltree",
-    subtitle: "Social Skill-Building Platform",
+    subtitle: "Social Platform",
+    year: "2024",
     techStack: ["Next.js", "NestJS", "PostgreSQL", "Prisma"],
     description:
-      "Architected a scalable social platform for visualising \"Skill Forests\" – directed graphs of how people grow. Designed database schemas for gamification logic, ranked events and XP calculation.",
+      "Architected a scalable social platform for visualising \"Skill Forests\" – directed graphs of how people grow. Gamification & logic: ranked events, XP calculation.",
+    detail: "Skill Forests schema, relational modelling for prerequisites and progression paths.",
     githubUrl: "https://github.com/yourusername/skilltree",
     mediaSrc: "/media/skilltree-preview.mp4"
   },
   {
     id: "santorini",
-    title: "Santorini",
-    subtitle: "Real-Time Turn Constraint System",
+    title: "Santorini Engine",
+    subtitle: "Game Dev",
+    year: "2023",
     techStack: ["Java", "Swing", "Design Patterns"],
     description:
-      "Implemented a Java Swing engine for the Santorini board game, with a God Power system that overrides base movement and build rules via Factory and Visitor design patterns.",
+      "Java Swing engine for Santorini board game. God Power system overriding core movement rules via Factory and Visitor patterns.",
+    detail: "Turn constraint system, rule composition.",
     githubUrl: "https://github.com/yourusername/santorini-engine",
     mediaSrc: "/media/santorini-preview.mp4"
   },
   {
     id: "knowbal",
-    title: "KnowbalOne",
-    subtitle: "Enterprise Workflow Automation",
+    title: "KnowbalOne CRM",
+    subtitle: "Enterprise App",
+    year: "2025",
     techStack: ["CRM", "Automation", "Integrations"],
     description:
-      "Built document checklists, eligibility checkers and automation rails that keep casework in sync across stakeholders, surfacing risks before they become blockers.",
+      "Workflow automation, eligibility checker. Document checklists and automation rails for casework and stakeholders.",
     mediaSrc: "/media/knowbal-preview.mp4"
+  },
+  {
+    id: "studyknowbal",
+    title: "StudyKnowbal",
+    subtitle: "LMS Platform",
+    year: "2024",
+    techStack: ["LMS", "E-learning", "Web"],
+    description:
+      "E-learning hierarchies and student portal for structured learning paths.",
+    mediaSrc: "/media/studyknowbal-preview.mp4"
+  },
+  {
+    id: "medicine-shop",
+    title: "Medicine Shop Software",
+    subtitle: "C++ System",
+    year: "2023",
+    techStack: ["C++", "UML", "OOP"],
+    description:
+      "Inventory tracking and management system. UML architecture and object-oriented design.",
+    mediaSrc: "/media/medicine-shop-preview.mp4"
+  },
+  {
+    id: "school-attendance",
+    title: "School Attendance System",
+    subtitle: "Web App",
+    year: "2023",
+    techStack: ["PHP", "SQL", "RBAC"],
+    description:
+      "Role-Based Access Control (RBAC), attendance records and reporting.",
+    mediaSrc: "/media/school-attendance-preview.mp4"
   }
 ];
 

@@ -1,75 +1,107 @@
-'use client';
+"use client";
 
+import { useRef, useState } from "react";
 import { experiences } from "@/lib/content";
 
+const KNOWBAL_HEADLINE = "CRM Optimization & Automation";
+const KNOWBAL_METRICS = "Reduced manual admin overhead via automated email triggers.";
+const KNOWBAL_TECH = ["Smart Document Checklists", "Applicant Eligibility Checker"];
+
 export function NarrativeSection() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const cardsRef = useRef<(HTMLElement | null)[]>([]);
+
+  const scrollToCard = (index: number) => {
+    setActiveIndex(index);
+    const el = cardsRef.current[index];
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <section
       id="experience"
-      className="relative min-h-screen px-6 py-20 md:px-12 lg:px-20"
+      className="relative min-h-screen px-6 py-16 md:px-12 lg:px-20"
     >
-      <div className="mx-auto max-w-6xl grid gap-12 md:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)]">
-        {/* Sticky timeline */}
+      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2">
+        {/* Left: Controller – sticky list */}
         <aside className="relative">
-          <div className="sticky top-28 space-y-8">
-            <p className="mono-label text-muted-foreground">NARRATIVE</p>
-            <div className="h-px w-16 bg-gradient-to-r from-foreground/60 to-transparent" />
-
-            <div className="space-y-6 text-xs text-muted-foreground">
-              {experiences.map((exp, index) => (
-                <div
+          <div className="sticky top-28 space-y-1">
+            <p className="font-architect mb-6 text-[0.7rem] text-muted-foreground">
+              COMMAND CENTER
+            </p>
+            {experiences.map((exp, index) => {
+              const year = exp.period.split("–")[0].trim().split(" ").pop();
+              const isActive = activeIndex === index;
+              return (
+                <button
                   key={exp.company}
-                  className={`space-y-2 ${
-                    index === 0 ? "opacity-100" : index === 1 ? "opacity-75" : "opacity-50"
+                  type="button"
+                  onClick={() => scrollToCard(index)}
+                  className={`flex w-full items-center gap-4 py-4 text-left transition-opacity ${
+                    isActive ? "opacity-100" : "opacity-40 hover:opacity-70"
                   }`}
                 >
-                  <p className="mono-label text-foreground">
-                    {exp.period.split("–")[0].trim().split(" ").pop()}
-                  </p>
-                  <p>
-                    {exp.company} · {exp.role}
-                  </p>
-                </div>
-              ))}
-            </div>
+                  <span
+                    className={`h-px flex-shrink-0 transition-all ${
+                      isActive ? "w-12 bg-foreground shadow-[0_0_12px_rgba(250,250,250,0.5)]" : "w-8 bg-muted-foreground/50"
+                    }`}
+                  />
+                  <span className="font-architect text-[0.7rem]">
+                    {year}: {exp.company} · {exp.role}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </aside>
 
-        <div className="space-y-10">
+        {/* Right: Display – scrollable cards with snap */}
+        <div className="max-h-[80vh] overflow-y-auto snap-y snap-mandatory scroll-smooth md:max-h-[70vh]">
           {experiences.map((exp, index) => (
             <article
               key={exp.company}
-              className={`border px-6 py-6 md:px-8 md:py-8 text-sm md:text-base ${
-                index === 0
-                  ? "border-border/60 bg-card/60"
-                  : index === 1
-                  ? "border-border/40 bg-card/50"
-                  : "border-border/30 bg-card/40"
-              }`}
+              ref={(el) => {
+                cardsRef.current[index] = el;
+              }}
+              className="snap-start border border-border/60 bg-card/80 min-h-[60vh] px-6 py-8 md:min-h-[55vh] md:px-8 md:py-10"
             >
-              <p
-                className={`mono-label mb-3 ${
-                  index === 0 ? "text-accent" : "text-muted-foreground"
-                }`}
-              >
-                {exp.company.toUpperCase()} · {exp.role.toUpperCase()} ·{" "}
-                {exp.period.toUpperCase()}
+              <p className="font-architect mb-3 text-[0.7rem] text-muted-foreground">
+                {exp.company.toUpperCase()} · {exp.role.toUpperCase()} · {exp.period.toUpperCase()}
               </p>
-              <h2 className="mb-3 text-xl md:text-2xl font-semibold tracking-tightest">
+              <h2 className="font-display mb-4 text-xl leading-none md:text-2xl tracking-tight">
                 {index === 0
-                  ? "Enterprise workflow automation for migration professionals."
+                  ? KNOWBAL_HEADLINE
                   : index === 1
-                  ? "Leading teams from concept to shipped products."
-                  : "A foundation in software, systems and applied mathematics."}
+                    ? "Led software team · Mentored developers"
+                    : "Bachelor of Software Engineering (Honours), Monash University"}
               </h2>
-              <ul className="space-y-2 text-muted-foreground">
-                {exp.achievements.map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="mt-[6px] h-[2px] w-4 bg-muted-foreground/50" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+              {index === 0 && (
+                <>
+                  <p className="font-narrator mb-4 text-sm leading-relaxed text-muted-foreground md:text-base">
+                    {KNOWBAL_METRICS}
+                  </p>
+                  <ul className="font-narrator space-y-2 text-sm leading-relaxed text-muted-foreground md:text-base">
+                    {KNOWBAL_TECH.map((item) => (
+                      <li key={item} className="flex gap-2">
+                        <span className="h-px w-4 shrink-0 bg-muted-foreground/50 mt-1.5" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              {index !== 0 && (
+                <ul className="font-narrator space-y-2 text-sm leading-relaxed text-muted-foreground md:text-base">
+                  {exp.achievements.map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="mt-1.5 h-px w-4 shrink-0 bg-muted-foreground/50" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </article>
           ))}
         </div>
@@ -77,4 +109,3 @@ export function NarrativeSection() {
     </section>
   );
 }
-
