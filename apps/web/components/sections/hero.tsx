@@ -169,7 +169,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
 
         {/* View Work – small, dimmed, bounces across header */}
         <div
-          className="absolute inset-0 flex items-end justify-end pb-8 pr-4 pt-20 md:pb-10 md:pr-6"
+          className="absolute inset-0 flex items-end justify-end pb-8 pr-6 pt-20 md:pb-10 md:pr-12 lg:pr-20"
           onMouseMove={handleMagnetic}
           onMouseLeave={resetMagnetic}
         >

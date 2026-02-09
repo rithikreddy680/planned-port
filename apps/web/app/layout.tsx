@@ -4,8 +4,6 @@ import { aeonik, geistSans, geistMono } from "./fonts";
 import { CursorSpotlight } from "@/components/motion/cursor-spotlight";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { CvButton } from "@/components/ui/cv-button";
-import { FooterBranding } from "@/components/sections/footer-branding";
 
 export const metadata: Metadata = {
   title: "Rithik Reddy | Full Stack Software Engineer",
@@ -32,8 +30,6 @@ export default function RootLayout({
             {/* Searchlight cursor */}
             <CursorSpotlight />
             <ThemeToggle />
-            <CvButton />
-            <FooterBranding />
 
             <div className="relative z-10">
               {children}

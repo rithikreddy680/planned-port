@@ -1046,6 +1046,12 @@ video {
 .pt-20 {
   padding-top: 5rem;
 }
+.pt-10 {
+  padding-top: 2.5rem;
+}
+.pr-6 {
+  padding-right: 1.5rem;
+}
 .text-left {
   text-align: left;
 }
@@ -1515,6 +1521,14 @@ body::-webkit-scrollbar {
     padding-right: 2rem;
   }
 
+  .md\:pt-12 {
+    padding-top: 3rem;
+  }
+
+  .md\:pr-12 {
+    padding-right: 3rem;
+  }
+
   .md\:text-2xl {
     font-size: 1.5rem;
     line-height: 2rem;
@@ -1573,6 +1587,10 @@ body::-webkit-scrollbar {
 
   .lg\:px-20 {
     padding-left: 5rem;
+    padding-right: 5rem;
+  }
+
+  .lg\:pr-20 {
     padding-right: 5rem;
   }
 
