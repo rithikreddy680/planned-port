@@ -157,8 +157,11 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
           style={{ fontFamily: "var(--font-geist-mono), monospace" }}
         >
           <span className="inline-flex items-start gap-1 text-foreground">
-            <span className="inline-flex items-center rounded-full border border-foreground/80 px-[1.125rem] py-[0.45rem] text-[1.215rem] font-medium sm:text-[1.395rem] md:text-[1.575rem]">
-              RITHIK REDDY
+            <span
+              className="inline-flex items-center rounded-full border border-foreground/80 px-[0.9rem] py-[0.35rem] text-[1.215rem] font-semibold tracking-tight sm:text-[1.395rem] md:text-[1.575rem]"
+              style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}
+            >
+              Rithik Reddy
             </span>
             <span className="text-[0.6em] leading-none">TM</span>
           </span>
@@ -179,9 +182,9 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
               whileHover={{ scale: 1.1 }}
             >
               <span
-                className="font-architect normal-case text-[clamp(0.9rem,1.1vw,1.3rem)] font-bold tracking-[0.18em] group-hover:animate-spin-slow"
+                className="normal-case text-[clamp(0.9rem,1.1vw,1.3rem)] font-semibold tracking-tight group-hover:animate-spin-slow"
                 style={{
-                  fontFamily: "var(--font-geist-mono), monospace",
+                  fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                   textTransform: "none"
                 }}
               >
