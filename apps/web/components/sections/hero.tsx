@@ -156,15 +156,35 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
           className="relative ml-auto max-w-xl text-left"
           style={{ fontFamily: "var(--font-geist-mono), monospace" }}
         >
-          <span className="inline-flex items-start gap-1 text-foreground">
-            <span
+          <motion.span
+            className="inline-flex items-start gap-1 text-foreground"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.span
               className="inline-flex items-center rounded-full border border-foreground/80 px-[0.9rem] py-[0.35rem] text-[1.215rem] font-semibold tracking-tight sm:text-[1.395rem] md:text-[1.575rem]"
               style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}
+              animate={{
+                y: [0, -2, 0],
+                boxShadow: [
+                  "0 0 0 rgba(255,255,255,0)",
+                  "0 10px 30px rgba(255,255,255,0.12)",
+                  "0 0 0 rgba(255,255,255,0)"
+                ]
+              }}
+              transition={{ duration: 3.2, ease: "easeInOut", repeat: Infinity }}
             >
               Rithik Reddy
-            </span>
-            <span className="text-[0.6em] leading-none">TM</span>
-          </span>
+            </motion.span>
+            <motion.span
+              className="text-[0.6em] leading-none"
+              animate={{ y: [0, -1, 0], opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 3.2, ease: "easeInOut", repeat: Infinity }}
+            >
+              TM
+            </motion.span>
+          </motion.span>
         </header>
 
         {/* View Work – small, dimmed, bounces across header */}
