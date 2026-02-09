@@ -7,6 +7,8 @@ const WHEEL_SPEED = 1.2; // header lift per wheel delta
 const TOP_LOCK_EPS = 2; // px tolerance to avoid jitter at top
 const OVERSCROLL_THRESHOLD = 180; // px of "pull past top" required to reactivate cover
 const COVER_OFF_DURATION = 999; // ms for click-to-open animation
+const AUTO_SNAP_THRESHOLD = 0.33; // 33% open triggers snap-off
+const AUTO_SNAP_IDLE_MS = 140; // ms after wheel stop to decide snap
 
 function easePower3Out(t: number): number {
   return 1 - (1 - t) * (1 - t) * (1 - t);
@@ -36,9 +38,51 @@ export function HeroRevealWrapper() {
   const overscrollRef = useRef(0);
   const overscrollAttemptsRef = useRef(0);
   const isCoverAnimatingRef = useRef(false);
+  const snapIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   vhRef.current = vh;
   headerLiftRef.current = headerLift;
   coverActiveRef.current = coverActive;
+
+  const startCoverOffAnimation = (startOverride?: number) => {
+    if (!coverActiveRef.current || isCoverAnimatingRef.current) return;
+    isCoverAnimatingRef.current = true;
+    const start = startOverride ?? headerLiftRef.current;
+    const target = vhRef.current;
+    const startT = performance.now();
+    const animate = (now: number) => {
+      const t = Math.min((now - startT) / COVER_OFF_DURATION, 1);
+      const eased = easePower3Out(t);
+      const next = start + (target - start) * eased;
+      setHeaderLift(next);
+      if (t < 1) requestAnimationFrame(animate);
+      else {
+        setHeaderLift(target);
+        setCoverActive(false);
+        isCoverAnimatingRef.current = false;
+      }
+    };
+    requestAnimationFrame(animate);
+  };
+
+  const startCoverOnAnimation = (startOverride?: number) => {
+    if (!coverActiveRef.current || isCoverAnimatingRef.current) return;
+    isCoverAnimatingRef.current = true;
+    const start = startOverride ?? headerLiftRef.current;
+    const target = 0;
+    const startT = performance.now();
+    const animate = (now: number) => {
+      const t = Math.min((now - startT) / COVER_OFF_DURATION, 1);
+      const eased = easePower3Out(t);
+      const next = start + (target - start) * eased;
+      setHeaderLift(next);
+      if (t < 1) requestAnimationFrame(animate);
+      else {
+        setHeaderLift(target);
+        isCoverAnimatingRef.current = false;
+      }
+    };
+    requestAnimationFrame(animate);
+  };
 
   useEffect(() => {
     const setVhPx = () => setVh(window.innerHeight);
@@ -83,21 +127,31 @@ export function HeroRevealWrapper() {
       if (isCoverAnimatingRef.current) return;
       overscrollRef.current = 0;
       overscrollAttemptsRef.current = 0;
+      if (snapIdleRef.current) clearTimeout(snapIdleRef.current);
       const currentVh = vhRef.current;
       let next = headerLiftRef.current + e.deltaY * WHEEL_SPEED;
-      if (next >= currentVh) {
-        setHeaderLift(currentVh);
+      const snapAt = currentVh * AUTO_SNAP_THRESHOLD;
+      if (e.deltaY > 0 && next >= snapAt) {
+        next = Math.min(next, currentVh);
+        setHeaderLift(next);
         e.preventDefault();
-        setCoverActive(false);
+        startCoverOffAnimation(next);
         return;
       }
       if (next <= 0) next = 0;
       setHeaderLift(next);
+      const shouldSnapBack = next < currentVh * AUTO_SNAP_THRESHOLD;
+      snapIdleRef.current = setTimeout(() => {
+        if (shouldSnapBack) startCoverOnAnimation(next);
+      }, AUTO_SNAP_IDLE_MS);
       e.preventDefault();
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
-    return () => window.removeEventListener("wheel", onWheel);
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      if (snapIdleRef.current) clearTimeout(snapIdleRef.current);
+    };
   }, []);
 
   // Lock page scroll while cover is active
@@ -124,24 +178,7 @@ export function HeroRevealWrapper() {
   const translateY = coverActive ? -headerLift : -vh;
   const heroScrollY = coverActive ? headerLift : 0;
   const handleViewWork = () => {
-    if (!coverActiveRef.current || isCoverAnimatingRef.current) return;
-    isCoverAnimatingRef.current = true;
-    const start = headerLiftRef.current;
-    const target = vhRef.current;
-    const startT = performance.now();
-    const animate = (now: number) => {
-      const t = Math.min((now - startT) / COVER_OFF_DURATION, 1);
-      const eased = easePower3Out(t);
-      const next = start + (target - start) * eased;
-      setHeaderLift(next);
-      if (t < 1) requestAnimationFrame(animate);
-      else {
-        setHeaderLift(target);
-        setCoverActive(false);
-        isCoverAnimatingRef.current = false;
-      }
-    };
-    requestAnimationFrame(animate);
+    startCoverOffAnimation();
   };
 
   return (
