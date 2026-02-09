@@ -56,7 +56,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
     const dx = e.clientX - centerX;
     const dy = e.clientY - centerY;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    const magnetRadius = 705;
+    const magnetRadius = 550;
     if (distance < magnetRadius) {
       const strength = (magnetRadius - distance) / magnetRadius;
       const pull = Math.min(1.15 * strength, 1);
