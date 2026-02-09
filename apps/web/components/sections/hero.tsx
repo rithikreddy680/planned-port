@@ -153,57 +153,15 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
       <div className="relative z-10 flex min-h-screen flex-col justify-between px-6 py-10 md:px-12 lg:px-20">
         {/* Header: name + title – left-aligned text, block on the right */}
         <header
-          className="relative ml-auto max-w-xl overflow-visible text-left px-5 py-3"
+          className="relative ml-auto max-w-xl text-left"
           style={{ fontFamily: "var(--font-geist-mono), monospace" }}
         >
-          {/* White bar arrives later from the right and extends past the page */}
-          <motion.div
-            className="absolute inset-y-0 left-0 overflow-hidden rounded-md"
-            style={{
-              width: "calc(100% + 140vw)",
-              backgroundImage:
-                "linear-gradient(90deg, hsl(var(--foreground) / 0.95) 0%, hsl(var(--foreground) / 0.9) 65%, hsl(var(--foreground) / 0) 100%)"
-            }}
-            initial={{ x: "120%", opacity: 0, boxShadow: "0 0 0 rgba(255,255,255,0)" }}
-            animate={{
-              x: ["120%", "0%", "-1%"],
-              opacity: [0, 1, 1],
-              boxShadow: [
-                "0 0 0 rgba(255,255,255,0)",
-                "0 0 28px rgba(255,255,255,0.35)",
-                "0 0 0 rgba(255,255,255,0)"
-              ]
-            }}
-            transition={{ duration: 1.3, delay: 0.35, ease: [0.22, 1, 0.36, 1], times: [0, 0.85, 1] }}
-            aria-hidden
-          >
-            {/* Glass Pulse */}
-            <motion.div
-              className="absolute inset-0"
-              style={{
-                backgroundImage:
-                  "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 100%)",
-                filter: "blur(2px)",
-                mixBlendMode: "screen"
-              }}
-              animate={{ x: ["-20%", "120%"], opacity: [0.15, 0.9, 0.15] }}
-              transition={{ duration: 2.2, ease: "easeInOut", repeat: Infinity }}
-              aria-hidden
-            />
-          </motion.div>
-          <motion.div
-            className="relative z-10"
-            initial={{ color: "#ffffff" }}
-            animate={{ color: "#000000" }}
-            transition={{ duration: 0.6, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <h1 className="text-3xl font-bold tracking-tight text-current sm:text-4xl md:text-[2.5rem]">
+          <span className="inline-flex items-start gap-1 text-foreground">
+            <span className="inline-flex items-center rounded-full border border-foreground/80 px-[1.125rem] py-[0.45rem] text-[1.215rem] font-medium sm:text-[1.395rem] md:text-[1.575rem]">
               RITHIK REDDY
-            </h1>
-            <p className="mt-0 text-sm font-bold tracking-tight text-current/80 md:mt-0.5 md:text-base">
-              An Engineer by Profession, A Reverse Engineer by Nature.
-            </p>
-          </motion.div>
+            </span>
+            <span className="text-[0.6em] leading-none">TM</span>
+          </span>
         </header>
 
         {/* View Work – small, dimmed, bounces across header */}

@@ -527,10 +527,6 @@ video {
   left: 0px;
   right: 0px;
 }
-.inset-y-0 {
-  top: 0px;
-  bottom: 0px;
-}
 .bottom-0 {
   bottom: 0px;
 }
@@ -560,9 +556,6 @@ video {
 }
 .top-full {
   top: 100%;
-}
-.-left-1\/2 {
-  left: -50%;
 }
 .-z-20 {
   z-index: -20;
@@ -606,9 +599,6 @@ video {
 }
 .ml-auto {
   margin-left: auto;
-}
-.mt-0 {
-  margin-top: 0px;
 }
 .mt-1 {
   margin-top: 0.25rem;
@@ -705,9 +695,6 @@ video {
 }
 .w-full {
   width: 100%;
-}
-.w-1\/2 {
-  width: 50%;
 }
 .min-w-\[10ch\] {
   min-width: 10ch;
@@ -821,6 +808,9 @@ video {
 .gap-6 {
   gap: 1.5rem;
 }
+.gap-1 {
+  gap: 0.25rem;
+}
 .space-y-1 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
@@ -877,9 +867,6 @@ video {
 .rounded-sm {
   border-radius: 0;
 }
-.rounded-md {
-  border-radius: 0.125rem;
-}
 .border {
   border-width: 1px;
 }
@@ -897,6 +884,9 @@ video {
 }
 .border-foreground\/60 {
   border-color: hsl(var(--foreground) / 0.6);
+}
+.border-foreground\/80 {
+  border-color: hsl(var(--foreground) / 0.8);
 }
 .border-foreground\/90 {
   border-color: hsl(var(--foreground) / 0.9);
@@ -1006,13 +996,13 @@ video {
   padding-top: 4rem;
   padding-bottom: 4rem;
 }
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
 .py-24 {
   padding-top: 6rem;
   padding-bottom: 6rem;
-}
-.py-3 {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
 }
 .py-4 {
   padding-top: 1rem;
@@ -1021,6 +1011,14 @@ video {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+.px-\[1\.125rem\] {
+  padding-left: 1.125rem;
+  padding-right: 1.125rem;
+}
+.py-\[0\.45rem\] {
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
 }
 .pb-8 {
   padding-bottom: 2rem;
@@ -1043,6 +1041,9 @@ video {
 .align-baseline {
   vertical-align: baseline;
 }
+.align-top {
+  vertical-align: top;
+}
 .font-architect {
   font-family: var(--font-aeonik), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
@@ -1056,16 +1057,15 @@ video {
   font-size: 1.5rem;
   line-height: 2rem;
 }
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-}
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
 }
 .text-\[0\.7rem\] {
   font-size: 0.7rem;
+}
+.text-\[1\.35rem\] {
+  font-size: 1.35rem;
 }
 .text-\[clamp\(0\.9rem\2c 1\.1vw\2c 1\.3rem\)\] {
   font-size: clamp(0.9rem, 1.1vw, 1.3rem);
@@ -1078,11 +1078,23 @@ video {
   font-size: 1.25rem;
   line-height: 1.75rem;
 }
+.text-\[0\.55em\] {
+  font-size: 0.55em;
+}
+.text-\[1\.215rem\] {
+  font-size: 1.215rem;
+}
+.text-\[0\.6em\] {
+  font-size: 0.6em;
+}
 .font-black {
   font-weight: 900;
 }
 .font-bold {
   font-weight: 700;
+}
+.font-medium {
+  font-weight: 500;
 }
 .uppercase {
   text-transform: uppercase;
@@ -1117,9 +1129,6 @@ video {
 }
 .text-black\/70 {
   color: rgb(0 0 0 / 0.7);
-}
-.text-current {
-  color: currentColor;
 }
 .text-foreground {
   color: hsl(var(--foreground));
@@ -1411,16 +1420,15 @@ body::-webkit-scrollbar {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .sm\:text-4xl {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
+  .sm\:text-\[1\.55rem\] {
+    font-size: 1.55rem;
+  }
+
+  .sm\:text-\[1\.395rem\] {
+    font-size: 1.395rem;
   }
 }
 @media (min-width: 768px) {
-
-  .md\:mt-0\.5 {
-    margin-top: 0.125rem;
-  }
 
   .md\:max-h-\[70vh\] {
     max-height: 70vh;
@@ -1501,8 +1509,8 @@ body::-webkit-scrollbar {
     line-height: 1;
   }
 
-  .md\:text-\[2\.5rem\] {
-    font-size: 2.5rem;
+  .md\:text-\[1\.75rem\] {
+    font-size: 1.75rem;
   }
 
   .md\:text-base {
@@ -1513,6 +1521,10 @@ body::-webkit-scrollbar {
   .md\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
+  }
+
+  .md\:text-\[1\.575rem\] {
+    font-size: 1.575rem;
   }
 }
 @media (min-width: 1024px) {
