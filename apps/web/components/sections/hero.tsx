@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 
 const ROLLING_WORDS = ["SCALABLE", "COGNITIVE", "RECURSIVE", "RESILIENT", "ADAPTIVE", "HEURISTIC"];
 const ROLL_INTERVAL_MS = 1700;
@@ -198,18 +199,14 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
               data-magnetic-btn
               style={{ x: springX, y: springY }}
               onClick={scrollToProjects}
-              className="group relative flex aspect-square h-[clamp(140px,14vw,260px)] w-[clamp(140px,14vw,260px)] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-foreground/90 bg-foreground/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-[0_0_60px_rgba(255,255,255,0.85)] focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+              className="group relative flex aspect-square h-[clamp(126px,12.6vw,234px)] w-[clamp(126px,12.6vw,234px)] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-foreground/90 bg-foreground/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-[0_0_60px_rgba(255,255,255,0.85)] focus:outline-none focus-visible:outline-none focus-visible:ring-0"
               whileHover={{ scale: 1.1 }}
             >
-              <span
-                className="normal-case text-[clamp(0.9rem,1.1vw,1.3rem)] font-semibold tracking-tight group-hover:animate-spin-slow"
-                style={{
-                  fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-                  textTransform: "none"
-                }}
-              >
-                View Work
-              </span>
+              <ChevronDown
+                className="h-[clamp(2.4rem,3.2vw,3.8rem)] w-[clamp(2.4rem,3.2vw,3.8rem)]"
+                strokeWidth={3}
+                aria-hidden
+              />
             </motion.button>
           </div>
         </div>

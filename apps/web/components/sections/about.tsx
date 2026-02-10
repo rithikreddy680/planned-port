@@ -90,12 +90,12 @@ export function AboutSection() {
         </div>
 
         {/* Duality Statement */}
-        <div className="mt-8 max-w-5xl text-left">
-          <h2 className="whitespace-nowrap text-[clamp(2.162rem,5.309vw,4.522rem)] font-semibold leading-[0.95] text-foreground">
+        <div className="mt-8 w-full max-w-6xl text-left">
+          <h2 className="whitespace-nowrap text-[clamp(2rem,5vw,4.35rem)] font-semibold leading-[0.95] text-foreground">
             AN ENGINEER BY PROFESSION
           </h2>
           <h3
-            className="mt-2 whitespace-nowrap text-[clamp(1.967rem,4.915vw,4.129rem)] font-semibold leading-[0.95] text-transparent"
+            className="mt-2 whitespace-nowrap text-[clamp(2rem,5vw,4.35rem)] font-semibold leading-[0.95] text-transparent"
             style={{
               WebkitTextStroke: "1px rgba(250,250,250,0.95)"
             }}
