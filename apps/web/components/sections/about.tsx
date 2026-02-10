@@ -1,30 +1,125 @@
 "use client";
 
+import { BrainCircuit, Cpu, Microscope, TrendingUp } from "lucide-react";
+import { motion } from "framer-motion";
+
+const ICON_SIZE = 30;
+
+const QUALITIES = [
+  {
+    title: "COGNITIVE VELOCITY",
+    copy:
+      "Rapid assimilation of new tech stacks and paradigms. I don't just learn; I absorb and implement. Capable of transitioning from concept to deployment in unfamiliar environments with minimal latency.",
+    Icon: Cpu,
+    tone: "bg-[#F5D86E]"
+  },
+  {
+    title: "SYSTEMIC CURIOSITY",
+    copy:
+      "A compulsion to deconstruct the 'black box.' I analyze not just how code works, but why it was architected that way. Driven to uncover hidden logic, optimize bottlenecks, and understand the root cause of every anomaly.",
+    Icon: Microscope,
+    tone: "bg-[#F05A47]"
+  },
+  {
+    title: "RELENTLESS OPTIMIZATION",
+    copy:
+      "Thriving under complexity and high-stakes constraints. Good code is a baseline; I aim for the theoretical limit of performance. I treat every project as a competition against inefficiency, pushing for leaner, faster, and more scalable solutions.",
+    Icon: TrendingUp,
+    tone: "bg-[#FF8FD1]"
+  },
+  {
+    title: "ALGORITHMIC PRECISION",
+    copy:
+      "First-principles thinking applied to system architecture. I approach problems with mathematical rigor, ensuring that every function, class, and database schema is logically sound, deterministic, and built to scale without technical debt.",
+    Icon: BrainCircuit,
+    tone: "bg-[#8FD4FF]"
+  }
+];
+
+function QualityNode({
+  title,
+  copy,
+  Icon,
+  tone
+}: {
+  title: string;
+  copy: string;
+  Icon: typeof Cpu;
+  tone: string;
+}) {
+  return (
+    <article
+      className={`relative flex min-h-[320px] flex-col gap-6 rounded-3xl border border-black/10 p-6 text-black md:min-h-[360px] md:p-7 ${tone}`}
+    >
+      <div className="flex items-center justify-center text-black">
+        <Icon size={ICON_SIZE} strokeWidth={1.5} aria-hidden />
+      </div>
+      <h3 className="min-h-[3.5rem] text-center text-xl font-semibold leading-tight tracking-tight">
+        {title}
+      </h3>
+      <div className="h-px w-full bg-black/20" aria-hidden />
+      <p className="text-sm leading-relaxed text-black/80">
+        {copy}
+      </p>
+    </article>
+  );
+}
+
 export function AboutSection() {
   return (
     <section
       id="about"
-      className="relative h-screen bg-background px-6 md:px-12 lg:px-20"
+      className="relative h-screen bg-background px-6 py-16 md:px-12 lg:px-20"
+      style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}
     >
-      <div className="mx-auto flex h-full max-w-6xl flex-col justify-center gap-10 lg:grid lg:grid-cols-2 lg:items-center">
-        <div>
-          <p className="font-architect text-[0.7rem] text-muted-foreground">
-            ABOUT
-          </p>
-          <h2 className="font-display mt-4 text-3xl leading-none tracking-tight md:text-4xl">
-            Building systems that stay sharp under pressure.
-          </h2>
+      <div className="mx-auto flex h-full max-w-6xl flex-col">
+        {/* About Tag */}
+        <div className="flex items-center gap-2 text-base font-semibold tracking-tight text-foreground md:text-lg">
+          <span className="text-foreground">
+            About me
+            <motion.span
+              className="inline-block align-baseline"
+              style={{ fontSize: "1.2em", transform: "translateY(0.14em)" }}
+              animate={{ opacity: [0.2, 1, 0.2] }}
+              transition={{ duration: 1.2, ease: "easeInOut", repeat: Infinity }}
+              aria-hidden
+            >
+              !
+            </motion.span>
+          </span>
         </div>
-        <div className="space-y-4">
-          <p className="font-narrator text-sm leading-relaxed text-muted-foreground md:text-base">
-            I design and ship full-stack products with a focus on scalable logic,
-            clear data flow, and high-velocity iteration. The goal is always the
-            same: elegant systems that are easy to maintain and hard to break.
-          </p>
-          <p className="font-narrator text-sm leading-relaxed text-muted-foreground md:text-base">
-            Digital Noir is the visual layer — the engineering underneath is
-            precise, tested, and built to evolve.
-          </p>
+
+        {/* Duality Statement */}
+        <div className="mt-8 max-w-5xl text-left">
+          <h2 className="whitespace-nowrap text-[clamp(2.162rem,5.309vw,4.522rem)] font-semibold leading-[0.95] text-foreground">
+            AN ENGINEER BY PROFESSION
+          </h2>
+          <h3
+            className="mt-2 whitespace-nowrap text-[clamp(1.967rem,4.915vw,4.129rem)] font-semibold leading-[0.95] text-transparent"
+            style={{
+              WebkitTextStroke: "1px rgba(250,250,250,0.95)"
+            }}
+          >
+            A REVERSE ENGINEER BY NATURE
+          </h3>
+        </div>
+
+        <p className="mt-10 w-full max-w-6xl text-base font-medium leading-relaxed text-foreground/80 md:text-lg">
+          I don't just build software; I deconstruct logic. I trace every system
+          back to its first principles, then reconstruct it with speed, precision,
+          and intent. This is the underlying framework behind every line of code
+          I write, and the filter I use to eliminate noise, surface signals, and
+          ship systems that stay clean under scale.
+        </p>
+
+        {/* Data Grid + Scanner Beam */}
+        <div className="relative mt-10 grid grid-cols-1 gap-6 md:grid-cols-4">
+          {/* Beam track */}
+          <div className="pointer-events-none absolute left-0 top-0 h-px w-full bg-white/10" />
+          {/* Beam head removed */}
+          {QUALITIES.map(({ title, copy, Icon, tone }) => (
+            <QualityNode key={title} title={title} copy={copy} Icon={Icon} tone={tone} />
+          ))}
         </div>
       </div>
     </section>

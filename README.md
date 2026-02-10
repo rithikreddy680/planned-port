@@ -6,6 +6,7 @@ Digital Noir portfolio for Rithik Reddy. Monorepo powered by Turborepo and pnpm.
 - Framework: Next.js 14 (App Router), React 18, TypeScript
 - Styling: Tailwind CSS, PostCSS, Autoprefixer
 - Motion: Framer Motion, GSAP, Lenis (smooth scroll)
+- Icons: Lucide React
 - State: Zustand (theme store)
 - Fonts: Geist (plus custom DM Sans/Aeonik-style stack)
 - Testing: Vitest
@@ -33,6 +34,7 @@ Digital Noir portfolio for Rithik Reddy. Monorepo powered by Turborepo and pnpm.
 ### Sections (`apps/web/components/sections`)
 - `hero.tsx` — hero poster, identity block, animated headline
 - `hero-reveal-wrapper.tsx` — header cover/curtain logic (snap/unlock scroll flow)
+- `about.tsx` — dual-identity header + 4-node data grid
 - `narrative.tsx` — “Command Centre” experience layout
 - `projects.tsx` — projects grid + hover previews + modal details
 - `skills.tsx` — skills section

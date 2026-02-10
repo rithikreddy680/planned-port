@@ -191,6 +191,10 @@ export function HeroRevealWrapper() {
         }}
         aria-hidden={!coverActive}
       >
+        {/* Distinct cover layer: tint + edge + depth */}
+        <div className="pointer-events-none absolute inset-0 bg-black/25" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 shadow-[inset_0_-2px_0_rgba(255,255,255,0.15)]" />
         <HeroSection scrollY={heroScrollY} onViewWork={handleViewWork} />
       </div>
     </>
