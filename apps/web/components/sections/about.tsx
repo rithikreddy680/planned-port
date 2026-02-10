@@ -1,9 +1,31 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { BrainCircuit, Cpu, Microscope, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 
 const ICON_SIZE = 30;
+const LINE1_TEXT = "AN ENGINEER BY PROFESSION";
+const LINE2_TEXT = "A REVERSE ENGINEER BY NATURE";
+const GLITCH_DELAY_MS = 200;
+const GLITCH_DURATION_MS = 800;
+const GLITCH_INTERVAL_MS = 40;
+const GLITCH_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&*@?!";
+
+const introVariants = {
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+};
+
+const gridVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.35 } }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 14 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } }
+};
 
 const QUALITIES = [
   {
@@ -48,7 +70,8 @@ function QualityNode({
   tone: string;
 }) {
   return (
-    <article
+    <motion.article
+      variants={cardVariants}
       className={`relative flex min-h-[320px] flex-col gap-6 rounded-3xl border border-black/10 p-6 text-black md:min-h-[360px] md:p-7 ${tone}`}
     >
       <div className="flex items-center justify-center text-black">
@@ -61,11 +84,53 @@ function QualityNode({
       <p className="text-sm leading-relaxed text-black/80">
         {copy}
       </p>
-    </article>
+    </motion.article>
   );
 }
 
 export function AboutSection() {
+  const [line2Text, setLine2Text] = useState(LINE2_TEXT);
+  const [phase, setPhase] = useState<"idle" | "glitch" | "revealed">("idle");
+  const [showContent, setShowContent] = useState(false);
+  const hasRunRef = useRef(false);
+
+  useEffect(() => {
+    let intervalId: number | null = null;
+    let glitchTimeout: number | null = null;
+    let delayTimeout: number | null = null;
+    const startGlitch = () => {
+      if (hasRunRef.current) return;
+      hasRunRef.current = true;
+      setPhase("glitch");
+      const startTime = performance.now();
+      intervalId = window.setInterval(() => {
+        const progress = Math.min((performance.now() - startTime) / GLITCH_DURATION_MS, 1);
+        const scrambled = LINE2_TEXT.split("").map((char) => {
+          if (char === " ") return " ";
+          if (Math.random() < progress) return char;
+          return GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+        });
+        setLine2Text(scrambled.join(""));
+      }, GLITCH_INTERVAL_MS);
+      glitchTimeout = window.setTimeout(() => {
+        if (intervalId) window.clearInterval(intervalId);
+        setLine2Text(LINE2_TEXT);
+        setPhase("revealed");
+        setShowContent(true);
+      }, GLITCH_DURATION_MS);
+    };
+    const onCoverOpened = () => {
+      delayTimeout = window.setTimeout(startGlitch, GLITCH_DELAY_MS);
+    };
+    window.addEventListener("cover:opened", onCoverOpened);
+    return () => {
+      window.removeEventListener("cover:opened", onCoverOpened);
+      if (intervalId) window.clearInterval(intervalId);
+      if (glitchTimeout) window.clearTimeout(glitchTimeout);
+      if (delayTimeout) window.clearTimeout(delayTimeout);
+    };
+  }, []);
+
   return (
     <section
       id="about"
@@ -92,35 +157,56 @@ export function AboutSection() {
         {/* Duality Statement */}
         <div className="mt-8 w-full max-w-6xl text-left">
           <h2 className="whitespace-nowrap text-[clamp(2rem,5vw,4.35rem)] font-semibold leading-[0.95] text-foreground">
-            AN ENGINEER BY PROFESSION
+            {LINE1_TEXT}
           </h2>
           <h3
-            className="mt-2 whitespace-nowrap text-[clamp(2rem,5vw,4.35rem)] font-semibold leading-[0.95] text-transparent"
+            className={`mt-2 inline-block whitespace-nowrap text-[clamp(2rem,5vw,4.35rem)] font-semibold leading-[0.95] ${
+              phase === "revealed" ? "text-transparent" : "text-foreground"
+            }`}
             style={{
-              WebkitTextStroke: "1px rgba(250,250,250,0.95)"
+              WebkitTextStroke: phase === "revealed" ? "1px rgba(250,250,250,0.95)" : "0px transparent",
+              textShadow:
+                phase === "glitch"
+                  ? "1px 0 0 rgba(255,0,80,0.8), -1px 0 0 rgba(0,200,255,0.8)"
+                  : "none",
+              fontFamily:
+                phase === "revealed"
+                  ? "var(--font-geist-mono), monospace"
+                  : "var(--font-geist-sans), system-ui, sans-serif",
+              minWidth: `${LINE2_TEXT.length}ch`
             }}
           >
-            A REVERSE ENGINEER BY NATURE
+            {line2Text}
           </h3>
         </div>
 
-        <p className="mt-10 w-full max-w-6xl text-base font-medium leading-relaxed text-foreground/80 md:text-lg">
+        <motion.p
+          className="mt-10 w-full max-w-6xl text-base font-medium leading-relaxed text-foreground/80 md:text-lg"
+          variants={introVariants}
+          initial="hidden"
+          animate={showContent ? "show" : "hidden"}
+        >
           I don't just build software; I deconstruct logic. I trace every system
           back to its first principles, then reconstruct it with speed, precision,
           and intent. This is the underlying framework behind every line of code
           I write, and the filter I use to eliminate noise, surface signals, and
           ship systems that stay clean under scale.
-        </p>
+        </motion.p>
 
         {/* Data Grid + Scanner Beam */}
-        <div className="relative mt-10 grid grid-cols-1 gap-6 md:grid-cols-4">
+        <motion.div
+          className="relative mt-10 grid grid-cols-1 gap-6 md:grid-cols-4"
+          variants={gridVariants}
+          initial="hidden"
+          animate={showContent ? "show" : "hidden"}
+        >
           {/* Beam track */}
           <div className="pointer-events-none absolute left-0 top-0 h-px w-full bg-white/10" />
           {/* Beam head removed */}
           {QUALITIES.map(({ title, copy, Icon, tone }) => (
             <QualityNode key={title} title={title} copy={copy} Icon={Icon} tone={tone} />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

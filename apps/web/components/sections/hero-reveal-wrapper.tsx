@@ -14,6 +14,11 @@ function easePower3Out(t: number): number {
   return 1 - (1 - t) * (1 - t) * (1 - t);
 }
 
+function notifyCoverOpened() {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent("cover:opened"));
+}
+
 declare global {
   interface Window {
     lenis?: {
@@ -59,6 +64,7 @@ export function HeroRevealWrapper() {
         setHeaderLift(target);
         setCoverActive(false);
         isCoverAnimatingRef.current = false;
+        notifyCoverOpened();
       }
     };
     requestAnimationFrame(animate);

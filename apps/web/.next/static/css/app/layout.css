@@ -657,11 +657,11 @@ video {
 .h-\[3px\] {
   height: 3px;
 }
-.h-\[clamp\(140px\2c 14vw\2c 260px\)\] {
-  height: clamp(140px, 14vw, 260px);
+.h-\[clamp\(126px\2c 12\.6vw\2c 234px\)\] {
+  height: clamp(126px, 12.6vw, 234px);
 }
-.h-\[clamp\(2rem\2c 2\.8vw\2c 3\.2rem\)\] {
-  height: clamp(2rem, 2.8vw, 3.2rem);
+.h-\[clamp\(2\.4rem\2c 3\.2vw\2c 3\.8rem\)\] {
+  height: clamp(2.4rem, 3.2vw, 3.8rem);
 }
 .h-full {
   height: 100%;
@@ -671,12 +671,6 @@ video {
 }
 .h-screen {
   height: 100vh;
-}
-.h-\[clamp\(2\.4rem\2c 3\.2vw\2c 3\.8rem\)\] {
-  height: clamp(2.4rem, 3.2vw, 3.8rem);
-}
-.h-\[clamp\(126px\2c 12\.6vw\2c 234px\)\] {
-  height: clamp(126px, 12.6vw, 234px);
 }
 .max-h-\[80vh\] {
   max-height: 80vh;
@@ -714,20 +708,14 @@ video {
 .w-8 {
   width: 2rem;
 }
-.w-\[clamp\(140px\2c 14vw\2c 260px\)\] {
-  width: clamp(140px, 14vw, 260px);
-}
-.w-\[clamp\(2rem\2c 2\.8vw\2c 3\.2rem\)\] {
-  width: clamp(2rem, 2.8vw, 3.2rem);
-}
-.w-full {
-  width: 100%;
+.w-\[clamp\(126px\2c 12\.6vw\2c 234px\)\] {
+  width: clamp(126px, 12.6vw, 234px);
 }
 .w-\[clamp\(2\.4rem\2c 3\.2vw\2c 3\.8rem\)\] {
   width: clamp(2.4rem, 3.2vw, 3.8rem);
 }
-.w-\[clamp\(126px\2c 12\.6vw\2c 234px\)\] {
-  width: clamp(126px, 12.6vw, 234px);
+.w-full {
+  width: 100%;
 }
 .min-w-\[10ch\] {
   min-width: 10ch;
@@ -737,9 +725,6 @@ video {
 }
 .max-w-4xl {
   max-width: 56rem;
-}
-.max-w-5xl {
-  max-width: 64rem;
 }
 .max-w-6xl {
   max-width: 72rem;
@@ -1138,11 +1123,8 @@ video {
 .text-\[1\.215rem\] {
   font-size: 1.215rem;
 }
-.text-\[clamp\(1\.967rem\2c 4\.915vw\2c 4\.129rem\)\] {
-  font-size: clamp(1.967rem, 4.915vw, 4.129rem);
-}
-.text-\[clamp\(2\.162rem\2c 5\.309vw\2c 4\.522rem\)\] {
-  font-size: clamp(2.162rem, 5.309vw, 4.522rem);
+.text-\[clamp\(2rem\2c 5vw\2c 4\.35rem\)\] {
+  font-size: clamp(2rem, 5vw, 4.35rem);
 }
 .text-base {
   font-size: 1rem;
@@ -1155,18 +1137,6 @@ video {
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
-}
-.text-\[clamp\(2\.25rem\2c 5\.6vw\2c 4\.85rem\)\] {
-  font-size: clamp(2.25rem, 5.6vw, 4.85rem);
-}
-.text-\[clamp\(2\.15rem\2c 5\.35vw\2c 4\.65rem\)\] {
-  font-size: clamp(2.15rem, 5.35vw, 4.65rem);
-}
-.text-\[clamp\(2\.05rem\2c 5\.1vw\2c 4\.45rem\)\] {
-  font-size: clamp(2.05rem, 5.1vw, 4.45rem);
-}
-.text-\[clamp\(2rem\2c 5vw\2c 4\.35rem\)\] {
-  font-size: clamp(2rem, 5vw, 4.35rem);
 }
 .font-black {
   font-weight: 900;
