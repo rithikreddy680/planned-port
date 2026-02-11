@@ -6,25 +6,52 @@ import { motion } from "framer-motion";
 
 const ICON_SIZE = 30;
 const LINE1_TEXT = "AN ENGINEER BY PROFESSION";
-const LINE2_TEXT = "A REVERSE ENGINEER BY NATURE";
-const GLITCH_DELAY_MS = 200;
-const GLITCH_DURATION_MS = 800;
+const LINE2_INITIAL = "AN ENGINEER BY NATURE";
+const LINE2_FINAL = "A REVERSE ENGINEER BY NATURE";
+const POP_LINES_DELAY_MS = 120;
+const POP_CONTENT_DELAY_MS = 700;
+const GLITCH_AFTER_CONTENT_MS = 2300;
+const GLITCH_DELAY_MS = 0;
+const GLITCH_DURATION_MS = 1000;
 const GLITCH_INTERVAL_MS = 40;
 const GLITCH_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&*@?!";
+const SHAKE_INTERVAL_MS = 5000;
+const SHAKE_DURATION_MS = 400;
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const introVariants = {
   hidden: { opacity: 0, y: 8 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } }
 };
 
 const gridVariants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: 0.35 } }
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.35, ease: EASE } }
 };
 
 const cardVariants = {
   hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } }
+  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE } }
+};
+
+const lineBlockVariants = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } }
+};
+
+const wordContainerLine1 = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1, ease: EASE } }
+};
+
+const wordContainerLine2 = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.9 } }
+};
+
+const wordVariant = {
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } }
 };
 
 const QUALITIES = [
@@ -89,52 +116,108 @@ function QualityNode({
 }
 
 export function AboutSection() {
-  const [line2Text, setLine2Text] = useState(LINE2_TEXT);
-  const [phase, setPhase] = useState<"idle" | "glitch" | "revealed">("idle");
+  const [line2Text, setLine2Text] = useState(LINE2_INITIAL);
+  const [phase, setPhase] = useState<"camouflage" | "glitch" | "revealed">("camouflage");
+  const [showLines, setShowLines] = useState(false);
   const [showContent, setShowContent] = useState(false);
-  const hasRunRef = useRef(false);
+  const [isShaking, setIsShaking] = useState(false);
+  const glitchIntervalRef = useRef<number | null>(null);
+  const glitchTimeoutRef = useRef<number | null>(null);
+  const delayTimeoutRef = useRef<number | null>(null);
+  const linesTimeoutRef = useRef<number | null>(null);
+  const contentTimeoutRef = useRef<number | null>(null);
+  const shakeIntervalRef = useRef<number | null>(null);
 
   useEffect(() => {
-    let intervalId: number | null = null;
-    let glitchTimeout: number | null = null;
-    let delayTimeout: number | null = null;
+    const clearTimers = () => {
+      if (glitchIntervalRef.current) window.clearInterval(glitchIntervalRef.current);
+      if (glitchTimeoutRef.current) window.clearTimeout(glitchTimeoutRef.current);
+      if (delayTimeoutRef.current) window.clearTimeout(delayTimeoutRef.current);
+      if (linesTimeoutRef.current) window.clearTimeout(linesTimeoutRef.current);
+      if (contentTimeoutRef.current) window.clearTimeout(contentTimeoutRef.current);
+      if (shakeIntervalRef.current) window.clearInterval(shakeIntervalRef.current);
+      glitchIntervalRef.current = null;
+      glitchTimeoutRef.current = null;
+      delayTimeoutRef.current = null;
+      linesTimeoutRef.current = null;
+      contentTimeoutRef.current = null;
+      shakeIntervalRef.current = null;
+    };
+
+    const resetState = () => {
+      setPhase("camouflage");
+      setLine2Text(LINE2_INITIAL);
+      setShowLines(false);
+      setShowContent(false);
+      setIsShaking(false);
+    };
+
     const startGlitch = () => {
-      if (hasRunRef.current) return;
-      hasRunRef.current = true;
+      clearTimers();
       setPhase("glitch");
       const startTime = performance.now();
-      intervalId = window.setInterval(() => {
+      setLine2Text("A ENGINEER BY NATURE");
+      glitchIntervalRef.current = window.setInterval(() => {
         const progress = Math.min((performance.now() - startTime) / GLITCH_DURATION_MS, 1);
-        const scrambled = LINE2_TEXT.split("").map((char) => {
+        const revealCount = Math.floor(progress * LINE2_FINAL.length);
+        const scrambled = LINE2_FINAL.split("").map((char, index) => {
           if (char === " ") return " ";
-          if (Math.random() < progress) return char;
+          if (index < revealCount) return char;
           return GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
         });
         setLine2Text(scrambled.join(""));
       }, GLITCH_INTERVAL_MS);
-      glitchTimeout = window.setTimeout(() => {
-        if (intervalId) window.clearInterval(intervalId);
-        setLine2Text(LINE2_TEXT);
+      glitchTimeoutRef.current = window.setTimeout(() => {
+        if (glitchIntervalRef.current) window.clearInterval(glitchIntervalRef.current);
+        setLine2Text(LINE2_FINAL);
         setPhase("revealed");
         setShowContent(true);
       }, GLITCH_DURATION_MS);
     };
     const onCoverOpened = () => {
-      delayTimeout = window.setTimeout(startGlitch, GLITCH_DELAY_MS);
+      clearTimers();
+      resetState();
+      linesTimeoutRef.current = window.setTimeout(() => {
+        setShowLines(true);
+      }, POP_LINES_DELAY_MS);
+      contentTimeoutRef.current = window.setTimeout(() => {
+        setShowContent(true);
+      }, POP_CONTENT_DELAY_MS);
+      delayTimeoutRef.current = window.setTimeout(
+        startGlitch,
+        POP_CONTENT_DELAY_MS + GLITCH_AFTER_CONTENT_MS + GLITCH_DELAY_MS
+      );
+    };
+    const onCoverClosed = () => {
+      clearTimers();
+      resetState();
     };
     window.addEventListener("cover:opened", onCoverOpened);
+    window.addEventListener("cover:closed", onCoverClosed);
     return () => {
       window.removeEventListener("cover:opened", onCoverOpened);
-      if (intervalId) window.clearInterval(intervalId);
-      if (glitchTimeout) window.clearTimeout(glitchTimeout);
-      if (delayTimeout) window.clearTimeout(delayTimeout);
+      window.removeEventListener("cover:closed", onCoverClosed);
+      clearTimers();
     };
   }, []);
+
+  useEffect(() => {
+    if (phase !== "revealed") return;
+    if (shakeIntervalRef.current) window.clearInterval(shakeIntervalRef.current);
+    shakeIntervalRef.current = window.setInterval(() => {
+      setIsShaking(true);
+      window.setTimeout(() => setIsShaking(false), SHAKE_DURATION_MS);
+    }, SHAKE_INTERVAL_MS);
+    return () => {
+      if (shakeIntervalRef.current) window.clearInterval(shakeIntervalRef.current);
+      shakeIntervalRef.current = null;
+    };
+  }, [phase]);
 
   return (
     <section
       id="about"
-      className="relative h-screen bg-background px-6 py-16 md:px-12 lg:px-20"
+      className="relative min-h-screen bg-background px-6 py-12 md:px-12 md:py-16 lg:px-20"
       style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}
     >
       <div className="mx-auto flex h-full max-w-6xl flex-col">
@@ -155,30 +238,85 @@ export function AboutSection() {
         </div>
 
         {/* Duality Statement */}
-        <div className="mt-8 w-full max-w-6xl text-left">
-          <h2 className="whitespace-nowrap text-[clamp(2rem,5vw,4.35rem)] font-semibold leading-[0.95] text-foreground">
-            {LINE1_TEXT}
-          </h2>
-          <h3
-            className={`mt-2 inline-block whitespace-nowrap text-[clamp(2rem,5vw,4.35rem)] font-semibold leading-[0.95] ${
-              phase === "revealed" ? "text-transparent" : "text-foreground"
-            }`}
-            style={{
-              WebkitTextStroke: phase === "revealed" ? "1px rgba(250,250,250,0.95)" : "0px transparent",
-              textShadow:
-                phase === "glitch"
-                  ? "1px 0 0 rgba(255,0,80,0.8), -1px 0 0 rgba(0,200,255,0.8)"
-                  : "none",
-              fontFamily:
-                phase === "revealed"
-                  ? "var(--font-geist-mono), monospace"
-                  : "var(--font-geist-sans), system-ui, sans-serif",
-              minWidth: `${LINE2_TEXT.length}ch`
-            }}
+        <motion.div
+          className="mt-8 w-full max-w-6xl text-left"
+          variants={lineBlockVariants}
+          initial="hidden"
+          animate={showLines ? "show" : "hidden"}
+        >
+          <motion.h2
+            className="text-[clamp(1.8rem,5.4vw,4.35rem)] font-semibold leading-[0.95] text-foreground md:whitespace-nowrap"
+            variants={wordContainerLine1}
+            initial="hidden"
+            animate={showLines ? "show" : "hidden"}
           >
-            {line2Text}
-          </h3>
-        </div>
+            {LINE1_TEXT.split(" ").map((word) => (
+              <motion.span key={word} variants={wordVariant} className="inline-block">
+                {word}&nbsp;
+              </motion.span>
+            ))}
+          </motion.h2>
+
+          {phase === "camouflage" ? (
+            <motion.h3
+              className="mt-2 text-[clamp(1.8rem,5.4vw,4.35rem)] font-semibold leading-[0.95] text-foreground md:whitespace-nowrap"
+              variants={wordContainerLine2}
+              initial="hidden"
+              animate={showLines ? "show" : "hidden"}
+              style={{ maxWidth: "100%" }}
+            >
+              {LINE2_INITIAL.split(" ").map((word) => (
+                <motion.span key={word} variants={wordVariant} className="inline-block">
+                  {word}&nbsp;
+                </motion.span>
+              ))}
+            </motion.h3>
+          ) : (
+            <motion.h3
+              className={`mt-2 inline-block text-[clamp(1.8rem,5.4vw,4.35rem)] font-semibold leading-[0.95] md:whitespace-nowrap ${
+                phase === "revealed"
+                  ? "text-transparent"
+                  : phase === "glitch"
+                    ? "text-foreground/70"
+                    : "text-foreground"
+              }`}
+              style={{
+                WebkitTextStroke: phase === "revealed" ? "1px rgba(250,250,250,0.95)" : "0px transparent",
+                fontFamily:
+                  phase === "revealed" || phase === "glitch"
+                    ? "var(--font-geist-mono), monospace"
+                    : "var(--font-geist-sans), system-ui, sans-serif",
+                maxWidth: "100%",
+                minWidth: `${Math.max(LINE2_INITIAL.length, LINE2_FINAL.length)}ch`
+              }}
+            >
+              {phase === "revealed" ? (
+                <>
+                  A{" "}
+                  <motion.span
+                    className="inline-block"
+                    animate={
+                      isShaking
+                        ? { x: [0, 1, -1, 0], y: [0, -1, 1, 0] }
+                        : { x: 0, y: 0 }
+                    }
+                    transition={isShaking ? { duration: 0.4, ease: "linear" } : { duration: 0.2 }}
+                    style={{
+                      textShadow: isShaking
+                        ? "1px 0 0 rgba(255,0,80,0.8), -1px 0 0 rgba(0,200,255,0.8)"
+                        : "none"
+                    }}
+                  >
+                    REVERSE ENGINEER
+                  </motion.span>{" "}
+                  BY NATURE
+                </>
+              ) : (
+                line2Text
+              )}
+            </motion.h3>
+          )}
+        </motion.div>
 
         <motion.p
           className="mt-10 w-full max-w-6xl text-base font-medium leading-relaxed text-foreground/80 md:text-lg"
@@ -200,8 +338,6 @@ export function AboutSection() {
           initial="hidden"
           animate={showContent ? "show" : "hidden"}
         >
-          {/* Beam track */}
-          <div className="pointer-events-none absolute left-0 top-0 h-px w-full bg-white/10" />
           {/* Beam head removed */}
           {QUALITIES.map(({ title, copy, Icon, tone }) => (
             <QualityNode key={title} title={title} copy={copy} Icon={Icon} tone={tone} />

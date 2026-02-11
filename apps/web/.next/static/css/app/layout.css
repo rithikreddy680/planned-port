@@ -672,6 +672,9 @@ video {
 .h-screen {
   height: 100vh;
 }
+.h-\[clamp\(110px\2c 12\.6vw\2c 234px\)\] {
+  height: clamp(110px, 12.6vw, 234px);
+}
 .max-h-\[80vh\] {
   max-height: 80vh;
 }
@@ -716,6 +719,9 @@ video {
 }
 .w-full {
   width: 100%;
+}
+.w-\[clamp\(110px\2c 12\.6vw\2c 234px\)\] {
+  width: clamp(110px, 12.6vw, 234px);
 }
 .min-w-\[10ch\] {
   min-width: 10ch;
@@ -1076,6 +1082,18 @@ video {
   padding-top: 0.35rem;
   padding-bottom: 0.35rem;
 }
+.py-12 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+.px-\[clamp\(0\.7rem\2c 1\.4vw\2c 0\.9rem\)\] {
+  padding-left: clamp(0.7rem, 1.4vw, 0.9rem);
+  padding-right: clamp(0.7rem, 1.4vw, 0.9rem);
+}
+.py-\[clamp\(0\.25rem\2c 0\.7vw\2c 0\.35rem\)\] {
+  padding-top: clamp(0.25rem, 0.7vw, 0.35rem);
+  padding-bottom: clamp(0.25rem, 0.7vw, 0.35rem);
+}
 .pb-8 {
   padding-bottom: 2rem;
 }
@@ -1137,6 +1155,12 @@ video {
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+.text-\[clamp\(1\.8rem\2c 5\.4vw\2c 4\.35rem\)\] {
+  font-size: clamp(1.8rem, 5.4vw, 4.35rem);
+}
+.text-\[clamp\(1rem\2c 2\.2vw\2c 1\.575rem\)\] {
+  font-size: clamp(1rem, 2.2vw, 1.575rem);
 }
 .font-black {
   font-weight: 900;
@@ -1205,6 +1229,9 @@ video {
 .text-zinc-600 {
   --tw-text-opacity: 1;
   color: rgb(82 82 91 / var(--tw-text-opacity, 1));
+}
+.text-foreground\/70 {
+  color: hsl(var(--foreground) / 0.7);
 }
 .underline {
   text-decoration-line: underline;
@@ -1518,6 +1545,10 @@ body::-webkit-scrollbar {
     gap: 2.5rem;
   }
 
+  .md\:whitespace-nowrap {
+    white-space: nowrap;
+  }
+
   .md\:p-7 {
     padding: 1.75rem;
   }
@@ -1540,6 +1571,11 @@ body::-webkit-scrollbar {
   .md\:py-6 {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
+  }
+
+  .md\:py-16 {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
   }
 
   .md\:pb-10 {

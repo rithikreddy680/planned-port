@@ -19,6 +19,11 @@ function notifyCoverOpened() {
   window.dispatchEvent(new CustomEvent("cover:opened"));
 }
 
+function notifyCoverClosed() {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent("cover:closed"));
+}
+
 declare global {
   interface Window {
     lenis?: {
@@ -44,6 +49,7 @@ export function HeroRevealWrapper() {
   const overscrollAttemptsRef = useRef(0);
   const isCoverAnimatingRef = useRef(false);
   const snapIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
   vhRef.current = vh;
   headerLiftRef.current = headerLift;
   coverActiveRef.current = coverActive;
@@ -122,6 +128,7 @@ export function HeroRevealWrapper() {
               window.scrollTo(0, 0);
               setHeaderLift(0);
               setCoverActive(true);
+              notifyCoverClosed();
             }
           }
         } else {
@@ -157,6 +164,65 @@ export function HeroRevealWrapper() {
     return () => {
       window.removeEventListener("wheel", onWheel);
       if (snapIdleRef.current) clearTimeout(snapIdleRef.current);
+    };
+  }, []);
+
+  // Touch support for mobile/tablet: drag to open cover
+  useEffect(() => {
+    const atTop = () => {
+      const y = window.lenis != null ? window.lenis.scroll : window.scrollY;
+      return y <= TOP_LOCK_EPS;
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (!coverActiveRef.current) return;
+      if (!atTop()) return;
+      touchStartYRef.current = e.touches[0]?.clientY ?? null;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!coverActiveRef.current) return;
+      if (!atTop()) return;
+      if (isCoverAnimatingRef.current) return;
+      const currentVh = vhRef.current;
+      const currentY = e.touches[0]?.clientY ?? 0;
+      if (touchStartYRef.current == null) touchStartYRef.current = currentY;
+      const deltaY = touchStartYRef.current - currentY;
+      if (Math.abs(deltaY) < 0.5) return;
+      let next = headerLiftRef.current + deltaY * 0.9;
+      const snapAt = currentVh * AUTO_SNAP_THRESHOLD;
+      if (deltaY > 0 && next >= snapAt) {
+        next = Math.min(next, currentVh);
+        setHeaderLift(next);
+        e.preventDefault();
+        startCoverOffAnimation(next);
+        touchStartYRef.current = currentY;
+        return;
+      }
+      if (next <= 0) next = 0;
+      setHeaderLift(next);
+      if (snapIdleRef.current) clearTimeout(snapIdleRef.current);
+      const shouldSnapBack = next < currentVh * AUTO_SNAP_THRESHOLD;
+      snapIdleRef.current = setTimeout(() => {
+        if (shouldSnapBack) startCoverOnAnimation(next);
+      }, AUTO_SNAP_IDLE_MS);
+      touchStartYRef.current = currentY;
+      e.preventDefault();
+    };
+
+    const onTouchEnd = () => {
+      touchStartYRef.current = null;
+    };
+
+    window.addEventListener("touchstart", onTouchStart, { passive: false });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd);
+    window.addEventListener("touchcancel", onTouchEnd);
+    return () => {
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
     };
   }, []);
 

@@ -164,7 +164,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <motion.span
-              className="inline-flex items-center rounded-full border border-foreground/80 px-[0.9rem] py-[0.35rem] text-[1.215rem] font-semibold tracking-tight sm:text-[1.395rem] md:text-[1.575rem]"
+              className="inline-flex items-center rounded-full border border-foreground/80 px-[clamp(0.7rem,1.4vw,0.9rem)] py-[clamp(0.25rem,0.7vw,0.35rem)] text-[clamp(1rem,2.2vw,1.575rem)] font-semibold tracking-tight"
               style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}
               animate={{
                 y: [0, -2, 0],
@@ -199,7 +199,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
               data-magnetic-btn
               style={{ x: springX, y: springY }}
               onClick={scrollToProjects}
-              className="group relative flex aspect-square h-[clamp(126px,12.6vw,234px)] w-[clamp(126px,12.6vw,234px)] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-foreground/90 bg-foreground/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-[0_0_60px_rgba(255,255,255,0.85)] focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+              className="group relative flex aspect-square h-[clamp(110px,12.6vw,234px)] w-[clamp(110px,12.6vw,234px)] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-foreground/90 bg-foreground/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-[0_0_60px_rgba(255,255,255,0.85)] focus:outline-none focus-visible:outline-none focus-visible:ring-0"
               whileHover={{ scale: 1.1 }}
             >
               <ChevronDown
