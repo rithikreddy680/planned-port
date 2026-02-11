@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: light;
   /* Digital Noir – default light token values used when not in .dark (for inverted mode) */
   --background: 0 0% 97%; /* near-white */
   --foreground: 240 10% 3.9%;
@@ -20,6 +21,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   /* True Digital Noir tokens */
   --background: 240 10% 3.9%; /* #09090B */
   --foreground: 0 0% 98%; /* #FAFAFA */
@@ -63,6 +65,33 @@ body {
 
 body::-webkit-scrollbar {
   display: none;
+}
+
+/* Card tones (light by default, dark overrides) */
+.card-tone-yellow {
+  background-color: #f7e7a0;
+}
+.card-tone-orange {
+  background-color: #f79b86;
+}
+.card-tone-pink {
+  background-color: #ffd0e8;
+}
+.card-tone-blue {
+  background-color: #cfeaff;
+}
+
+.dark .card-tone-yellow {
+  background-color: #f5d86e;
+}
+.dark .card-tone-orange {
+  background-color: #f05a47;
+}
+.dark .card-tone-pink {
+  background-color: #ff8fd1;
+}
+.dark .card-tone-blue {
+  background-color: #8fd4ff;
 }
 
 /* Aeonik Structure: three voices */

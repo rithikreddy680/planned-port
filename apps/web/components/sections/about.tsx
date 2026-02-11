@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BrainCircuit, Cpu, Microscope, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
+import { QualityCard } from "@/components/ui/quality-card";
 
 const ICON_SIZE = 30;
 const LINE1_TEXT = "AN ENGINEER BY PROFESSION";
@@ -60,60 +61,31 @@ const QUALITIES = [
     copy:
       "Rapid assimilation of new tech stacks and paradigms. I don't just learn; I absorb and implement. Capable of transitioning from concept to deployment in unfamiliar environments with minimal latency.",
     Icon: Cpu,
-    tone: "bg-[#F5D86E]"
+    tone: "card-tone-yellow"
   },
   {
     title: "SYSTEMIC CURIOSITY",
     copy:
       "A compulsion to deconstruct the 'black box.' I analyze not just how code works, but why it was architected that way. Driven to uncover hidden logic, optimize bottlenecks, and understand the root cause of every anomaly.",
     Icon: Microscope,
-    tone: "bg-[#F05A47]"
+    tone: "card-tone-orange"
   },
   {
     title: "RELENTLESS OPTIMIZATION",
     copy:
       "Thriving under complexity and high-stakes constraints. Good code is a baseline; I aim for the theoretical limit of performance. I treat every project as a competition against inefficiency, pushing for leaner, faster, and more scalable solutions.",
     Icon: TrendingUp,
-    tone: "bg-[#FF8FD1]"
+    tone: "card-tone-pink"
   },
   {
     title: "ALGORITHMIC PRECISION",
     copy:
       "First-principles thinking applied to system architecture. I approach problems with mathematical rigor, ensuring that every function, class, and database schema is logically sound, deterministic, and built to scale without technical debt.",
     Icon: BrainCircuit,
-    tone: "bg-[#8FD4FF]"
+    tone: "card-tone-blue"
   }
 ];
 
-function QualityNode({
-  title,
-  copy,
-  Icon,
-  tone
-}: {
-  title: string;
-  copy: string;
-  Icon: typeof Cpu;
-  tone: string;
-}) {
-  return (
-    <motion.article
-      variants={cardVariants}
-      className={`relative flex min-h-[320px] flex-col gap-6 rounded-3xl border border-black/10 p-6 text-black md:min-h-[360px] md:p-7 ${tone}`}
-    >
-      <div className="flex items-center justify-center text-black">
-        <Icon size={ICON_SIZE} strokeWidth={1.5} aria-hidden />
-      </div>
-      <h3 className="min-h-[3.5rem] text-center text-xl font-semibold leading-tight tracking-tight">
-        {title}
-      </h3>
-      <div className="h-px w-full bg-black/20" aria-hidden />
-      <p className="text-sm leading-relaxed text-black/80">
-        {copy}
-      </p>
-    </motion.article>
-  );
-}
 
 export function AboutSection() {
   const [line2Text, setLine2Text] = useState(LINE2_INITIAL);
@@ -281,13 +253,15 @@ export function AboutSection() {
                     : "text-foreground"
               }`}
               style={{
-                WebkitTextStroke: phase === "revealed" ? "1px rgba(250,250,250,0.95)" : "0px transparent",
+              WebkitTextStroke:
+                phase === "revealed"
+                  ? "1px hsl(var(--foreground) / 0.95)"
+                  : "0px transparent",
                 fontFamily:
                   phase === "revealed" || phase === "glitch"
                     ? "var(--font-geist-mono), monospace"
                     : "var(--font-geist-sans), system-ui, sans-serif",
-                maxWidth: "100%",
-                minWidth: `${Math.max(LINE2_INITIAL.length, LINE2_FINAL.length)}ch`
+                maxWidth: "100%"
               }}
             >
               {phase === "revealed" ? (
@@ -333,14 +307,22 @@ export function AboutSection() {
 
         {/* Data Grid + Scanner Beam */}
         <motion.div
-          className="relative mt-10 grid grid-cols-1 gap-6 md:grid-cols-4"
+          className="relative mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
           variants={gridVariants}
           initial="hidden"
           animate={showContent ? "show" : "hidden"}
         >
           {/* Beam head removed */}
           {QUALITIES.map(({ title, copy, Icon, tone }) => (
-            <QualityNode key={title} title={title} copy={copy} Icon={Icon} tone={tone} />
+            <QualityCard
+              key={title}
+              title={title}
+              copy={copy}
+              Icon={Icon}
+              toneClass={tone}
+              iconSize={ICON_SIZE}
+              variants={cardVariants}
+            />
           ))}
         </motion.div>
       </div>
