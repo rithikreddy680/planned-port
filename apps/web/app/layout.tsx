@@ -4,6 +4,7 @@ import { aeonik, geistSans, geistMono } from "./fonts";
 import { CursorSpotlight } from "@/components/motion/cursor-spotlight";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { FigmaCursor } from "@/components/ui/figma-cursor";
 
 export const metadata: Metadata = {
   title: "Rithik Reddy | Full Stack Software Engineer",
@@ -29,6 +30,7 @@ export default function RootLayout({
 
             {/* Searchlight cursor */}
             <CursorSpotlight />
+            <FigmaCursor />
             <ThemeToggle />
 
             <div className="relative z-10">

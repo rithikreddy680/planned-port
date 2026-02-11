@@ -67,6 +67,45 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+/* Custom cursor (Figma-like) */
+.figma-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+  color: #fff;
+  mix-blend-mode: difference;
+  transition: transform 0.04s linear;
+}
+.figma-cursor__arrow {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: translate(-2px, -2px);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+@media (pointer: fine) {
+  html,
+  body {
+    cursor: none;
+  }
+  a,
+  button,
+  [role="button"] {
+    cursor: none;
+  }
+  .figma-cursor {
+    display: block;
+  }
+}
+
 /* Card tones (light by default, dark overrides) */
 .card-tone-yellow {
   background-color: #f7e7a0;
