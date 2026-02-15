@@ -10,16 +10,16 @@ const KNOWBAL_HEADLINE = "CRM Optimization & Automation";
 const KNOWBAL_METRICS = "Reduced manual admin overhead via automated email triggers.";
 const KNOWBAL_TECH = ["Smart Document Checklists", "Applicant Eligibility Checker"];
 
-const ARC_R = 200;
+const ARC_R = 130;
 const ARC_START = 55;
 const ARC_END = 125;
-const CENTER_X = 340;
+const CENTER_X = 260;
 const CENTER_Y = ARC_R;
-const ITEM_W = 260;
+const ITEM_W = 280;
 const ITEM_H = 80;
-const SLOT_GAP = 14;
+const ITEM_GAP = 72;
 const LEFT_X = 8;
-const TOP_OFFSET = 100;
+const TOP_OFFSET = 90;
 
 function polar(angleDeg: number, r: number) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
@@ -136,7 +136,7 @@ export function NarrativeSection() {
   return (
     <section
       id="experience"
-      className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-background px-4 py-20 md:px-8 lg:px-12 xl:px-16 2xl:px-24"
+      className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden bg-background px-4 py-20 md:px-8 lg:px-12 xl:px-16 2xl:px-24"
       aria-label="Experience"
     >
       <div
@@ -154,9 +154,9 @@ export function NarrativeSection() {
         Experience
       </h2>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-stretch justify-center gap-8 lg:flex-row lg:items-center lg:gap-12 xl:gap-16">
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-stretch justify-center gap-8 overflow-visible lg:flex-row lg:items-center lg:gap-12 xl:gap-16">
         {/* Left: Vertical tumbler – all 3 visible, scroll or click to select */}
-        <aside className="flex flex-1 items-center justify-center lg:justify-end">
+        <aside className="flex min-w-0 flex-1 items-center justify-center overflow-visible lg:min-w-[460px] lg:flex-[1] lg:justify-start">
           <div
             ref={containerRef}
             tabIndex={0}
@@ -168,11 +168,10 @@ export function NarrativeSection() {
           >
             {/* Track – 3 items; selected scrolls to center, others scroll in vertical column (left) */}
             <div
-              className="relative overflow-hidden"
+              className="relative overflow-visible"
               style={{
-                width: ARC_R * 2 + 180,
-                height: ARC_R * 2 + 120,
-                minWidth: 420,
+                width: ITEM_W + (CENTER_X - ITEM_W / 2) + 40,
+                minHeight: ITEM_H * 3 + ITEM_GAP * 2 + 160,
               }}
             >
               {/* Arc guide – subtle, aligned with center */}
@@ -211,14 +210,14 @@ export function NarrativeSection() {
                       TOP_OFFSET +
                       CENTER_Y -
                       ITEM_H / 2 -
-                      SLOT_GAP -
-                      (ITEM_H + SLOT_GAP);
+                      ITEM_GAP -
+                      ITEM_H;
                   } else {
                     top =
                       TOP_OFFSET +
                       CENTER_Y +
                       ITEM_H / 2 +
-                      SLOT_GAP;
+                      ITEM_GAP;
                   }
                 }
                 return (
@@ -264,7 +263,7 @@ export function NarrativeSection() {
                       aria-hidden
                     />
                     <span
-                      className={`min-w-0 flex-1 truncate font-architect text-[0.68rem] uppercase leading-snug tracking-wider ${
+                      className={`min-w-0 flex-1 overflow-visible whitespace-nowrap font-architect text-[0.68rem] uppercase leading-snug tracking-wider ${
                         isActive ? "font-semibold text-foreground" : "text-foreground/80"
                       }`}
                     >
@@ -289,13 +288,13 @@ export function NarrativeSection() {
         </div>
 
         {/* Right: Terminal card */}
-        <div className="flex min-h-[280px] flex-1 flex-col justify-center lg:min-h-[340px]">
+        <div className="flex min-h-[360px] min-w-0 flex-1 flex-col justify-center lg:min-h-[420px] lg:flex-[3]">
           <motion.article
             key={activeIndex}
             initial={{ opacity: 0.3 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
-            className="relative overflow-hidden rounded-xl border border-border/50 bg-card/60 px-6 py-7 backdrop-blur-sm md:px-8 md:py-8 dark:border-white/[0.06] dark:bg-card/40"
+            className="relative overflow-hidden rounded-xl border border-border/50 bg-card/60 px-8 py-9 backdrop-blur-sm md:px-10 md:py-11 dark:border-white/[0.06] dark:bg-card/40"
             style={{
               boxShadow:
                 "0 0 0 1px hsl(var(--border)/0.3), 0 2px 16px -2px rgba(0,0,0,0.06)",
