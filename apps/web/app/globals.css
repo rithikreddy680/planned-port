@@ -87,8 +87,9 @@ body::-webkit-scrollbar {
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transform: translate(-2px, -2px);
+  transform: translate(-2px, -2px) scale(1);
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+  transition: transform 0.15s ease-out;
 }
 
 @media (pointer: fine) {
@@ -98,11 +99,15 @@ body::-webkit-scrollbar {
   }
   a,
   button,
-  [role="button"] {
+  [role="button"],
+  .cursor-pointer {
     cursor: none;
   }
   .figma-cursor {
     display: block;
+  }
+  .figma-cursor--hover .figma-cursor__arrow {
+    transform: translate(-2px, -2px) scale(1.15);
   }
 }
 
@@ -177,5 +182,21 @@ body::-webkit-scrollbar {
 }
 .font-architect-wide {
   letter-spacing: 0.1em;
+}
+
+/* Arc Reactor: heat distortion shimmer when core is active */
+@keyframes heat-distortion {
+  0%,
+  100% {
+    opacity: 0.02;
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    opacity: 0.07;
+    transform: scale(1.02) translate(1px, -1px);
+  }
+}
+.heat-distortion {
+  animation: heat-distortion 3s ease-in-out infinite;
 }
 

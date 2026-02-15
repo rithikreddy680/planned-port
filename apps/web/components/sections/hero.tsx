@@ -164,7 +164,8 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <motion.span
-              className="inline-flex items-center rounded-full border border-foreground/80 px-[clamp(0.7rem,1.4vw,0.9rem)] py-[clamp(0.25rem,0.7vw,0.35rem)] text-[clamp(1rem,2.2vw,1.575rem)] font-semibold tracking-tight"
+              data-cursor-hover
+              className="inline-flex cursor-pointer items-center rounded-full border border-foreground/80 px-[clamp(0.7rem,1.4vw,0.9rem)] py-[clamp(0.25rem,0.7vw,0.35rem)] text-[clamp(1rem,2.2vw,1.575rem)] font-semibold tracking-tight transition-colors duration-200 hover:border-foreground hover:bg-foreground hover:text-background"
               style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}
               animate={{
                 y: [0, -2, 0],
@@ -175,6 +176,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
                 ]
               }}
               transition={{ duration: 3.2, ease: "easeInOut", repeat: Infinity }}
+              whileHover={{ scale: 1.06, boxShadow: "0 0 40px rgba(255,255,255,0.3)" }}
             >
               Rithik Reddy
             </motion.span>

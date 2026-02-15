@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMousePosition } from "@/hooks/use-mouse-position";
+
+const INTERACTIVE_SELECTOR =
+  "a, button, [role='button'], input, select, textarea, [data-cursor-hover]";
 
 export function FigmaCursor() {
   const { x, y } = useMousePosition();
   const ref = useRef<HTMLDivElement>(null);
+  const [isOverInteractive, setIsOverInteractive] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -13,8 +17,25 @@ export function FigmaCursor() {
     el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
   }, [x, y]);
 
+  useEffect(() => {
+    const checkHover = () => {
+      const target = document.elementFromPoint(x, y);
+      if (!target) {
+        setIsOverInteractive(false);
+        return;
+      }
+      const isInteractive = target.closest(INTERACTIVE_SELECTOR);
+      setIsOverInteractive(!!isInteractive);
+    };
+    checkHover();
+  }, [x, y]);
+
   return (
-    <div ref={ref} className="figma-cursor" aria-hidden>
+    <div
+      ref={ref}
+      className={`figma-cursor ${isOverInteractive ? "figma-cursor--hover" : ""}`}
+      aria-hidden
+    >
       <svg
         className="figma-cursor__arrow"
         viewBox="0 0 24 24"

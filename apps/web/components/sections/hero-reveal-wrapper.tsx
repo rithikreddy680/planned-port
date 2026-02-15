@@ -96,6 +96,30 @@ export function HeroRevealWrapper() {
     requestAnimationFrame(animate);
   };
 
+  const startCoverReactivationAnimation = () => {
+    if (isCoverAnimatingRef.current) return;
+    isCoverAnimatingRef.current = true;
+    coverActiveRef.current = true;
+    setCoverActive(true);
+    const start = vhRef.current;
+    setHeaderLift(start);
+    const target = 0;
+    const startT = performance.now();
+    const animate = (now: number) => {
+      const t = Math.min((now - startT) / COVER_OFF_DURATION, 1);
+      const eased = easePower3Out(t);
+      const next = start + (target - start) * eased;
+      setHeaderLift(next);
+      if (t < 1) requestAnimationFrame(animate);
+      else {
+        setHeaderLift(target);
+        isCoverAnimatingRef.current = false;
+        notifyCoverClosed();
+      }
+    };
+    requestAnimationFrame(animate);
+  };
+
   useEffect(() => {
     const setVhPx = () => setVh(window.innerHeight);
     setVhPx();
@@ -126,9 +150,7 @@ export function HeroRevealWrapper() {
             if (overscrollAttemptsRef.current >= 2) {
               overscrollAttemptsRef.current = 0;
               window.scrollTo(0, 0);
-              setHeaderLift(0);
-              setCoverActive(true);
-              notifyCoverClosed();
+              startCoverReactivationAnimation();
             }
           }
         } else {

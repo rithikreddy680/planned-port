@@ -21,11 +21,11 @@ export const experiences: Experience[] = [
   },
   {
     company: "Monash University",
-    role: "Bachelor of Software Engineering (Honours)",
+    role: "Academic Mentor",
     period: "2022 – Present",
     achievements: [
-      "Building foundations in algorithms, distributed systems and applied mathematics.",
-      "Translating theory into engines and platforms that behave predictably under real-world constraints."
+      "Guided students through algorithms, distributed systems and applied mathematics.",
+      "Supported academic progress and helped translate theory into practical understanding."
     ]
   }
 ];
