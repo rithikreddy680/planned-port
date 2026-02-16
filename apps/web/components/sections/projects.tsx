@@ -1,139 +1,211 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { projects } from "@/lib/content";
 import type { Project as ProjectType } from "@/lib/types";
 
+const CARDS_PER_PAGE = 4;
+const CARD_BASE =
+  "rounded-xl border border-border/50 backdrop-blur-sm dark:border-white/[0.06]";
+
+/* ─── Simple collapsed card ─── */
 function ProjectCard({
   project,
-  onOpen
+  onHover,
 }: {
   project: ProjectType;
-  onOpen: () => void;
+  onHover: (cardRect: DOMRect) => void;
 }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [hovered, setHovered] = useState(false);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    if (hovered) {
-      v.play().catch(() => {});
-    } else {
-      v.pause();
-      v.currentTime = 0;
-    }
-  }, [hovered]);
-
   return (
-    <article
-      className="group relative flex min-h-[200px] flex-col justify-end overflow-hidden border border-border/60 bg-card/70 p-6 transition-transform hover:scale-[1.02] md:min-h-[240px]"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={onOpen}
+    <motion.article
+      className={`relative flex flex-col justify-end cursor-pointer ${CARD_BASE} bg-card/60 p-6 dark:bg-card/40 md:p-8`}
+      style={{
+        boxShadow:
+          "0 0 0 1px hsl(var(--border)/0.2), 0 2px 8px -2px rgba(0,0,0,0.06)",
+      }}
+      onMouseEnter={(e) => onHover(e.currentTarget.getBoundingClientRect())}
+      whileHover={{ scale: 1.03 }}
+      transition={{ type: "tween", duration: 0.2 }}
     >
-      {/* Background video (muted), plays on hover */}
-      <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-20">
-        <video
-          ref={videoRef}
-          src={project.mediaSrc}
-          className="h-full w-full object-cover"
-          muted
-          loop
-          playsInline
-          preload="metadata"
-        />
-      </div>
-      <div className="relative">
-        <h2 className="font-display text-xl leading-none tracking-tight md:text-2xl">
-          {project.title}
-        </h2>
-        <p className="font-architect mt-1 text-[0.7rem] text-muted-foreground">
-          {project.year}
-        </p>
-      </div>
-    </article>
+      <h2 className="font-display text-xl leading-none tracking-tight md:text-2xl">
+        {project.title}
+      </h2>
+      <p className="font-architect mt-2 text-[0.65rem] uppercase tracking-wider text-muted-foreground">
+        {project.year} · {project.subtitle}
+      </p>
+    </motion.article>
   );
 }
 
-function ProjectModal({
+/* ─── Flip overlay: animates size + position (no scale) ─── */
+function FlipOverlay({
   project,
-  onClose
+  cardTop,
+  cardLeft,
+  cardWidth,
+  cardHeight,
+  gridWidth,
+  gridHeight,
+  onClose,
 }: {
   project: ProjectType;
+  cardTop: number;
+  cardLeft: number;
+  cardWidth: number;
+  cardHeight: number;
+  gridWidth: number;
+  gridHeight: number;
   onClose: () => void;
 }) {
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [onClose]);
+  const cardState = {
+    top: cardTop,
+    left: cardLeft,
+    width: cardWidth,
+    height: cardHeight,
+  };
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 p-6 backdrop-blur-sm"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
+      className="absolute inset-0 z-50"
+      style={{ perspective: 1400 }}
+      onMouseLeave={onClose}
     >
-      <div
-        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto border border-border/60 bg-card p-8 shadow-xl"
-        onClick={(e) => e.stopPropagation()}
+      <motion.div
+        className="absolute"
+        style={{
+          transformStyle: "preserve-3d",
+          transformOrigin: "50% 50%",
+        }}
+        initial={{ ...cardState, rotateY: 0, opacity: 1 }}
+        animate={{
+          top: 0,
+          left: 0,
+          width: gridWidth,
+          height: gridHeight,
+          rotateY: 180,
+          opacity: 1,
+        }}
+        exit={{
+          ...cardState,
+          rotateY: 360,
+          opacity: 1,
+          transition: {
+            type: "spring",
+            damping: 26,
+            stiffness: 90,
+            mass: 1.2,
+          },
+        }}
+        transition={{
+          type: "spring",
+          damping: 26,
+          stiffness: 90,
+          mass: 1.2,
+        }}
       >
-        <div className="mb-6 flex items-start justify-between gap-4">
-          <div>
-            <h2 id="modal-title" className="font-display text-2xl leading-none tracking-tight md:text-3xl">
-              {project.title} — {project.subtitle}
-            </h2>
-            <p className="font-architect mt-2 text-[0.7rem] text-muted-foreground">
-              {project.year}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="font-architect text-[0.7rem] text-muted-foreground hover:text-foreground"
-            aria-label="Close"
-          >
-            CLOSE
-          </button>
-        </div>
-        <p className="font-narrator mb-6 text-sm leading-relaxed text-muted-foreground md:text-base">
-          {project.description}
-        </p>
-        {project.detail && (
-          <p className="font-narrator mb-6 text-sm italic leading-relaxed text-muted-foreground md:text-base">
-            {project.detail}
+        {/* Front face – identical to collapsed card */}
+        <div
+          className={`absolute inset-0 flex flex-col justify-end ${CARD_BASE} bg-card/60 p-6 dark:bg-card/40 md:p-8`}
+          style={{
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            boxShadow:
+              "0 0 0 1px hsl(var(--border)/0.2), 0 2px 8px -2px rgba(0,0,0,0.06)",
+          }}
+        >
+          <h2 className="font-display text-xl leading-none tracking-tight md:text-2xl">
+            {project.title}
+          </h2>
+          <p className="font-architect mt-2 text-[0.65rem] uppercase tracking-wider text-muted-foreground">
+            {project.year} · {project.subtitle}
           </p>
-        )}
-        <div className="mb-6 flex flex-wrap gap-2">
-          {project.techStack.map((tag) => (
-            <span
-              key={tag}
-              className="font-architect rounded-sm border border-border/60 bg-background/60 px-2 py-1 text-[0.7rem] text-muted-foreground"
-            >
-              {tag}
-            </span>
-          ))}
         </div>
-        {project.githubUrl && (
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="font-architect inline-flex items-center gap-2 border-b border-foreground/60 text-[0.7rem] text-foreground hover:border-foreground"
-          >
-            VIEW GITHUB
-          </a>
-        )}
-      </div>
+
+        {/* Back face – fully solid, expanded content */}
+        <div
+          className="absolute inset-0 flex flex-col overflow-y-auto rounded-xl border border-border/60 bg-background p-8 dark:border-white/[0.1] dark:bg-background md:p-10"
+          style={{
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+            boxShadow:
+              "0 0 0 1px hsl(var(--border)/0.3), 0 25px 60px -12px rgba(0,0,0,0.3), 0 12px 28px -8px rgba(0,0,0,0.2)",
+          }}
+        >
+          <p className="font-architect mb-2 text-[0.65rem] uppercase tracking-wider text-muted-foreground">
+            {project.year} · {project.subtitle.toUpperCase()}
+          </p>
+          <h3 className="font-display mb-5 text-2xl font-semibold leading-tight tracking-tight md:text-3xl">
+            {project.title}
+          </h3>
+          <p className="font-narrator mb-5 text-sm leading-relaxed text-muted-foreground md:text-base">
+            {project.description}
+          </p>
+          {project.detail && (
+            <p className="font-narrator mb-5 text-sm italic leading-relaxed text-muted-foreground/90 md:text-base">
+              {project.detail}
+            </p>
+          )}
+          <div className="mb-5 flex flex-wrap gap-2">
+            {project.techStack.map((tag) => (
+              <span
+                key={tag}
+                className="font-architect rounded-lg border border-foreground/20 bg-foreground/[0.04] px-2.5 py-1 text-[0.65rem] uppercase tracking-wider text-muted-foreground"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="font-architect mt-auto inline-flex w-fit items-center gap-2 border-b border-foreground/50 text-[0.65rem] uppercase tracking-wider text-foreground hover:border-foreground"
+            >
+              VIEW GITHUB
+            </a>
+          )}
+        </div>
+      </motion.div>
     </div>
   );
 }
 
+/* ─── Projects section ─── */
 export function ProjectsSection() {
-  const [modalProject, setModalProject] = useState<ProjectType | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [hoveredProject, setHoveredProject] = useState<{
+    project: ProjectType;
+    cardTop: number;
+    cardLeft: number;
+    cardWidth: number;
+    cardHeight: number;
+    gridWidth: number;
+    gridHeight: number;
+  } | null>(null);
+  const [page, setPage] = useState(0);
+
+  const totalPages = Math.ceil(projects.length / CARDS_PER_PAGE);
+  const startIdx = page * CARDS_PER_PAGE;
+  const visibleProjects = projects.slice(startIdx, startIdx + CARDS_PER_PAGE);
+
+  const handleHover = (project: ProjectType, cardRect: DOMRect) => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const gr = grid.getBoundingClientRect();
+
+    setHoveredProject({
+      project,
+      cardTop: cardRect.top - gr.top,
+      cardLeft: cardRect.left - gr.left,
+      cardWidth: cardRect.width,
+      cardHeight: cardRect.height,
+      gridWidth: gr.width,
+      gridHeight: gr.height,
+    });
+  };
 
   return (
     <section
@@ -142,31 +214,102 @@ export function ProjectsSection() {
     >
       <div className="mx-auto max-w-6xl">
         <header className="mb-10">
-          <p className="font-architect text-[0.7rem] text-muted-foreground">
+          <p className="font-architect text-[0.7rem] uppercase tracking-[0.2em] text-muted-foreground">
             SELECTED PROJECTS
           </p>
           <p className="font-narrator mt-1 text-sm text-muted-foreground md:text-base">
-            3×2 grid · hover to preview · click for details
+            Hover to flip
           </p>
         </header>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onOpen={() => setModalProject(project)}
-            />
-          ))}
-        </div>
-      </div>
+        <div className="flex items-center gap-4 md:gap-6">
+          {totalPages > 1 && (
+            <button
+              type="button"
+              onClick={() => {
+                setPage((p) => Math.max(0, p - 1));
+                setHoveredProject(null);
+              }}
+              disabled={page === 0}
+              className="flex h-12 w-12 shrink-0 items-center justify-center self-center rounded-xl border border-foreground/25 bg-foreground/[0.03] text-foreground/70 transition-colors hover:bg-foreground/[0.08] hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+              aria-label="Previous page"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+          )}
 
-      {modalProject && (
-        <ProjectModal
-          project={modalProject}
-          onClose={() => setModalProject(null)}
-        />
-      )}
+          <div
+            ref={gridRef}
+            className="relative grid min-h-[480px] flex-1 grid-cols-2 grid-rows-2 gap-6 md:min-h-[560px] md:gap-8"
+            onMouseLeave={() => setHoveredProject(null)}
+          >
+            {visibleProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onHover={(rect) => handleHover(project, rect)}
+              />
+            ))}
+
+            <AnimatePresence>
+              {hoveredProject && (
+                <FlipOverlay
+                  key={hoveredProject.project.id}
+                  project={hoveredProject.project}
+                  cardTop={hoveredProject.cardTop}
+                  cardLeft={hoveredProject.cardLeft}
+                  cardWidth={hoveredProject.cardWidth}
+                  cardHeight={hoveredProject.cardHeight}
+                  gridWidth={hoveredProject.gridWidth}
+                  gridHeight={hoveredProject.gridHeight}
+                  onClose={() => setHoveredProject(null)}
+                />
+              )}
+            </AnimatePresence>
+          </div>
+
+          {totalPages > 1 && (
+            <button
+              type="button"
+              onClick={() => {
+                setPage((p) => Math.min(totalPages - 1, p + 1));
+                setHoveredProject(null);
+              }}
+              disabled={page >= totalPages - 1}
+              className="flex h-12 w-12 shrink-0 items-center justify-center self-center rounded-xl border border-foreground/25 bg-foreground/[0.03] text-foreground/70 transition-colors hover:bg-foreground/[0.08] hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+              aria-label="Next page"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+          )}
+        </div>
+
+        {totalPages > 1 && (
+          <p className="font-architect mt-4 text-center text-[0.65rem] uppercase tracking-wider text-muted-foreground">
+            {page + 1} / {totalPages}
+          </p>
+        )}
+      </div>
     </section>
   );
 }
