@@ -91,6 +91,18 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
       ref={containerRef}
       className="relative flex min-h-screen flex-col overflow-hidden"
     >
+      {/* Background cover image */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: "url('/cover-portrait.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: 1,
+        }}
+      />
+
       {/* Typographic poster: stacked headline (parallax 1.2x) */}
       <motion.div
         className="pointer-events-none absolute inset-0 flex flex-col justify-center pl-[8vw] will-change-transform"
