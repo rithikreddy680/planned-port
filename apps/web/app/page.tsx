@@ -4,6 +4,7 @@ import { NarrativeSection } from "@/components/sections/narrative";
 import { ProjectsSection } from "@/components/sections/projects";
 import { SkillsSection } from "@/components/sections/skills";
 import { ContactSection } from "@/components/sections/contact";
+import { Footer } from "@/components/sections/footer";
 
 export default function HomePage() {
   return (
@@ -11,11 +12,12 @@ export default function HomePage() {
       <HeroRevealWrapper />
       <AboutSection />
       <NarrativeSection />
-      <div className="relative bg-background">
+      <div className="relative">
         <ProjectsSection />
         <SkillsSection />
         <ContactSection />
       </div>
+      <Footer />
     </main>
   );
 }

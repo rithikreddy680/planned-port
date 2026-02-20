@@ -7,7 +7,7 @@ import type { Project as ProjectType } from "@/lib/types";
 
 const CARDS_PER_PAGE = 4;
 const CARD_BASE =
-  "rounded-xl border border-border/50 backdrop-blur-sm dark:border-white/[0.06]";
+  "rounded-xl border border-border/50 backdrop-blur-md dark:border-white/[0.08]";
 
 /* ─── Simple collapsed card ─── */
 function ProjectCard({
@@ -19,10 +19,10 @@ function ProjectCard({
 }) {
   return (
     <motion.article
-      className={`relative flex flex-col justify-end cursor-pointer ${CARD_BASE} bg-card/60 p-6 dark:bg-card/40 md:p-8`}
+      className={`relative flex flex-col justify-end cursor-pointer ${CARD_BASE} bg-card/70 p-6 dark:bg-card/50 md:p-8`}
       style={{
         boxShadow:
-          "0 0 0 1px hsl(var(--border)/0.2), 0 2px 8px -2px rgba(0,0,0,0.06)",
+          "0 0 0 1px hsl(var(--border)/0.35), 0 4px 16px -4px rgba(0,0,0,0.2), 0 2px 8px -2px rgba(0,0,0,0.1)",
       }}
       onMouseEnter={(e) => onHover(e.currentTarget.getBoundingClientRect())}
       whileHover={{ scale: 1.03 }}
@@ -106,12 +106,12 @@ function FlipOverlay({
       >
         {/* Front face – identical to collapsed card */}
         <div
-          className={`absolute inset-0 flex flex-col justify-end ${CARD_BASE} bg-card/60 p-6 dark:bg-card/40 md:p-8`}
+          className={`absolute inset-0 flex flex-col justify-end ${CARD_BASE} bg-card/70 p-6 dark:bg-card/50 md:p-8`}
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
             boxShadow:
-              "0 0 0 1px hsl(var(--border)/0.2), 0 2px 8px -2px rgba(0,0,0,0.06)",
+              "0 0 0 1px hsl(var(--border)/0.35), 0 4px 16px -4px rgba(0,0,0,0.2), 0 2px 8px -2px rgba(0,0,0,0.1)",
           }}
         >
           <h2 className="font-display text-xl leading-none tracking-tight md:text-2xl">

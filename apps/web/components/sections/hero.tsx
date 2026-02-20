@@ -99,7 +99,6 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          opacity: 1,
         }}
       />
 

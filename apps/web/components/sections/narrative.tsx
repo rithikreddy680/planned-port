@@ -136,21 +136,10 @@ export function NarrativeSection() {
   return (
     <section
       id="experience"
-      className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden bg-background px-4 py-20 md:px-8 lg:px-12 xl:px-16 2xl:px-24"
+      className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden px-4 py-20 md:px-8 lg:px-12 xl:px-16 2xl:px-24"
       aria-label="Experience"
     >
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `
-            linear-gradient(hsl(var(--foreground)) 1px, transparent 1px),
-            linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)
-          `,
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      <h2 className="relative z-10 mb-12 font-architect text-[0.7rem] uppercase tracking-[0.35em] text-muted-foreground">
+      <h2 className="relative z-10 mb-12 font-architect text-[0.7rem] uppercase tracking-[0.35em] text-foreground/90">
         Experience
       </h2>
 
@@ -163,7 +152,7 @@ export function NarrativeSection() {
             role="listbox"
             aria-label="Experience selector – scroll or click to select"
             aria-activedescendant={`tumbler-item-${activeIndex}`}
-            className="relative flex cursor-default flex-col items-stretch outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2"
+            className="relative flex cursor-default flex-col items-stretch outline-none focus-visible:ring-2 focus-visible:ring-foreground/40 focus-visible:ring-offset-2"
             onKeyDown={onKeyDown}
           >
             {/* Track – 3 items; selected scrolls to center, others scroll in vertical column (left) */}
@@ -227,7 +216,7 @@ export function NarrativeSection() {
                     type="button"
                     role="option"
                     aria-selected={isActive}
-                    className="absolute flex items-center gap-3 rounded-xl border border-foreground/25 px-4 py-4 text-left transition-colors"
+                    className="absolute flex items-center gap-3 rounded-xl border backdrop-blur-md px-4 py-4 text-left transition-colors"
                     style={{
                       height: ITEM_H,
                       width: ITEM_W,
@@ -235,13 +224,16 @@ export function NarrativeSection() {
                     animate={{
                       left,
                       top,
-                      opacity: isActive ? 1 : 0.65,
+                      opacity: 1,
                       backgroundColor: isActive
-                        ? "hsl(var(--foreground) / 0.12)"
-                        : "hsl(var(--foreground) / 0.03)",
+                        ? "hsl(var(--card) / 0.98)"
+                        : "hsl(var(--card) / 0.75)",
+                      borderColor: isActive
+                        ? "hsl(var(--foreground) / 0.55)"
+                        : "hsl(var(--foreground) / 0.35)",
                       boxShadow: isActive
-                        ? "0 0 20px -6px hsl(var(--foreground)/0.15)"
-                        : "none",
+                        ? "0 0 0 2px hsl(var(--foreground)/0.2), 0 8px 32px -4px rgba(0,0,0,0.6), 0 4px 16px -2px rgba(0,0,0,0.4)"
+                        : "0 0 0 1px hsl(var(--foreground)/0.15), 0 4px 20px -2px rgba(0,0,0,0.55), 0 2px 10px -1px rgba(0,0,0,0.4)",
                     }}
                     transition={{
                       type: "tween",
@@ -250,10 +242,8 @@ export function NarrativeSection() {
                     }}
                     onClick={() => goToIndex(index)}
                     whileHover={{
-                      backgroundColor: isActive
-                        ? "hsl(var(--foreground) / 0.16)"
-                        : "hsl(var(--foreground) / 0.06)",
-                      opacity: isActive ? 1 : 0.85,
+                      backgroundColor: "hsl(var(--card) / 0.98)",
+                      borderColor: "hsl(var(--foreground) / 0.5)",
                     }}
                   >
                     <span
@@ -264,7 +254,7 @@ export function NarrativeSection() {
                     />
                     <span
                       className={`min-w-0 flex-1 overflow-visible whitespace-nowrap font-architect text-[0.68rem] uppercase leading-snug tracking-wider ${
-                        isActive ? "font-semibold text-foreground" : "text-foreground/80"
+                        isActive ? "font-semibold text-foreground" : "text-foreground/95"
                       }`}
                     >
                       {exp.role}
@@ -273,7 +263,7 @@ export function NarrativeSection() {
                 );
               })}
             </div>
-            <p className="mt-3 font-architect text-[0.55rem] uppercase tracking-widest text-muted-foreground/50">
+            <p className="mt-3 font-architect text-[0.6rem] uppercase tracking-widest text-foreground/80">
               Scroll or click to select
             </p>
           </div>
@@ -282,7 +272,7 @@ export function NarrativeSection() {
         {/* Connector */}
         <div className="hidden flex-shrink-0 items-center lg:flex" style={{ width: 24 }}>
           <div
-            className="h-20 w-px shrink-0 bg-gradient-to-b from-transparent via-foreground/20 to-transparent"
+            className="h-20 w-px shrink-0 bg-gradient-to-b from-transparent via-foreground/40 to-transparent"
             aria-hidden
           />
         </div>
@@ -294,12 +284,14 @@ export function NarrativeSection() {
             initial={{ opacity: 0.3 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
-            className="relative overflow-hidden rounded-xl border border-border/50 bg-card/60 px-8 py-9 backdrop-blur-sm md:px-10 md:py-11 dark:border-white/[0.06] dark:bg-card/40"
+            className="relative overflow-hidden rounded-xl border border-border/50 bg-card/70 px-8 py-9 backdrop-blur-md dark:border-white/[0.08] dark:bg-card/50 md:px-10 md:py-11"
             style={{
               boxShadow:
-                "0 0 0 1px hsl(var(--border)/0.3), 0 2px 16px -2px rgba(0,0,0,0.06)",
+                "0 0 0 1px hsl(var(--border)/0.4), 0 4px 24px -4px rgba(0,0,0,0.25), 0 2px 12px -2px rgba(0,0,0,0.15)",
             }}
           >
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.04),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_right,_rgba(0,0,0,0.1),transparent_50%)]" />
+            <div className="relative z-10">
             <p className="font-architect mb-1.5 text-[0.62rem] uppercase tracking-wider text-muted-foreground">
               {activeExp.role.toUpperCase()} · {activeExp.period}
             </p>
@@ -331,6 +323,7 @@ export function NarrativeSection() {
             <p className="font-architect mt-6 border-t border-border/40 pt-4 text-[0.52rem] uppercase tracking-[0.2em] text-muted-foreground/55">
               // CONNECTION: SECURE
             </p>
+            </div>
           </motion.article>
         </div>
       </div>

@@ -189,7 +189,7 @@ export function AboutSection() {
   return (
     <section
       id="about"
-      className="relative min-h-screen bg-background px-6 py-12 md:px-12 md:py-16 lg:px-20"
+      className="relative min-h-screen px-6 py-12 md:px-12 md:py-16 lg:px-20"
       style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}
     >
       <div className="mx-auto flex h-full max-w-6xl flex-col">
@@ -253,15 +253,19 @@ export function AboutSection() {
                     : "text-foreground"
               }`}
               style={{
-              WebkitTextStroke:
-                phase === "revealed"
-                  ? "1px hsl(var(--foreground) / 0.95)"
-                  : "0px transparent",
+                WebkitTextStroke:
+                  phase === "revealed"
+                    ? "2px hsl(var(--foreground))"
+                    : "0px transparent",
                 fontFamily:
                   phase === "revealed" || phase === "glitch"
                     ? "var(--font-geist-mono), monospace"
                     : "var(--font-geist-sans), system-ui, sans-serif",
-                maxWidth: "100%"
+                maxWidth: "100%",
+                textShadow:
+                  phase === "revealed"
+                    ? "0 2px 12px rgba(0,0,0,0.95), 0 0 24px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.9)"
+                    : "none"
               }}
             >
               {phase === "revealed" ? (
@@ -277,8 +281,8 @@ export function AboutSection() {
                     transition={isShaking ? { duration: 0.4, ease: "linear" } : { duration: 0.2 }}
                     style={{
                       textShadow: isShaking
-                        ? "1px 0 0 rgba(255,0,80,0.8), -1px 0 0 rgba(0,200,255,0.8)"
-                        : "none"
+                        ? "1px 0 0 rgba(255,0,80,0.9), -1px 0 0 rgba(0,200,255,0.9), 0 2px 12px rgba(0,0,0,0.95)"
+                        : "0 2px 12px rgba(0,0,0,0.95), 0 0 24px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.9)"
                     }}
                   >
                     REVERSE ENGINEER

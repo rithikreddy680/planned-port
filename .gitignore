@@ -1,1 +1,34 @@
 node_modules
+.next
+out
+dist
+build
+
+# env files
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# turbo
+.turbo
+
+# vercel
+.vercel
+
+# Large media (GitHub 100MB limit – host elsewhere for production)
+apps/web/public/cc2.mp4
+
+# debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

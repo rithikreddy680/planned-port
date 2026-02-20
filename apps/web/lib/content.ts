@@ -97,3 +97,31 @@ export const projects: Project[] = [
   }
 ];
 
+export const arsenalSlides: { title: string; description: string }[] = [
+  {
+    title: "AI & LLM Integration",
+    description:
+      "Exploring practical applications of large language models, RAG systems, and AI-augmented developer workflows."
+  },
+  {
+    title: "Distributed Systems",
+    description:
+      "Building scalable, resilient architectures – event sourcing, CQRS, and cloud-native patterns."
+  },
+  {
+    title: "Developer Experience",
+    description:
+      "Investing in tooling, DX, and documentation so teams can ship faster with less friction."
+  },
+  {
+    title: "Open Source",
+    description:
+      "Contributing to projects I use daily and giving back to the communities that shape my craft."
+  },
+  {
+    title: "Enterprise Integration",
+    description:
+      "Deepening expertise in SAP S/4HANA, ERP integrations, and business-critical systems."
+  }
+];
+

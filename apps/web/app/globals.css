@@ -3,26 +3,8 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
-  /* Digital Noir – default light token values used when not in .dark (for inverted mode) */
-  --background: 0 0% 97%; /* near-white */
-  --foreground: 240 10% 3.9%;
-
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
-
-  --muted: 240 4% 90%;
-  --muted-foreground: 240 5% 40%;
-
-  --border: 240 6% 80%;
-
-  --pointer-x: 50%;
-  --pointer-y: 50%;
-}
-
-.dark {
   color-scheme: dark;
-  /* True Digital Noir tokens */
+  /* Digital Noir – dark mode only */
   --background: 240 10% 3.9%; /* #09090B */
   --foreground: 0 0% 98%; /* #FAFAFA */
 
@@ -33,6 +15,9 @@
   --muted-foreground: 240 5% 64.9%;
 
   --border: 240 3.7% 15.9%;
+
+  --pointer-x: 50%;
+  --pointer-y: 50%;
 }
 
 /* Grayscale antialiasing across the entire page */
@@ -111,30 +96,17 @@ body::-webkit-scrollbar {
   }
 }
 
-/* Card tones (light by default, dark overrides) */
+/* Card tones */
 .card-tone-yellow {
-  background-color: #f7e7a0;
-}
-.card-tone-orange {
-  background-color: #f79b86;
-}
-.card-tone-pink {
-  background-color: #ffd0e8;
-}
-.card-tone-blue {
-  background-color: #cfeaff;
-}
-
-.dark .card-tone-yellow {
   background-color: #f5d86e;
 }
-.dark .card-tone-orange {
+.card-tone-orange {
   background-color: #f05a47;
 }
-.dark .card-tone-pink {
+.card-tone-pink {
   background-color: #ff8fd1;
 }
-.dark .card-tone-blue {
+.card-tone-blue {
   background-color: #8fd4ff;
 }
 
@@ -198,5 +170,14 @@ body::-webkit-scrollbar {
 }
 .heat-distortion {
   animation: heat-distortion 3s ease-in-out infinite;
+}
+
+/* Background video – slow continuous scale masks loop reset */
+@keyframes bg-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+.animate-bg-breathe {
+  animation: bg-breathe 8s ease-in-out infinite;
 }
 
