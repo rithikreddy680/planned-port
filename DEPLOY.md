@@ -12,7 +12,7 @@ git push origin main
 
 1. Go to [vercel.com](https://vercel.com) → **Add New** → **Project**
 2. Import your GitHub repository
-3. **Important:** Set **Root Directory** to `apps/web`
+3. **Important:** Leave **Root Directory** blank (repo root) so `turbo run build` runs correctly
 4. Click **Deploy** (first deploy may fail until env vars are set—that's okay)
 
 ## 3. Add Environment Variables
@@ -27,10 +27,25 @@ git push origin main
 
 3. **Redeploy** (Deployments → ... → Redeploy)
 
-## 4. Done
+## 4. Custom Domain
 
-Your site will be live at `https://your-project.vercel.app`
+1. In Vercel: **Project** → **Settings** → **Domains**
+2. Click **Add** and enter your domain (e.g. `rithikreddy.com` or `www.rithikreddy.com`)
+3. Add the DNS records at your registrar. **Vercel will show you the exact values** in the Domains panel. Typically:
+   - **Apex** (yourdomain.com): A record → `76.76.21.21`
+   - **www**: CNAME → your project's Vercel CNAME (e.g. `*.vercel-dns.com`)
 
-## Custom Domain (optional)
+4. Wait 5–60 minutes (or up to 24h) for DNS to propagate.
+5. For HTTPS, Vercel provisions SSL automatically once DNS is verified.
 
-Settings → Domains → Add your domain → Follow DNS instructions at your registrar.
+## 5. Done
+
+- Default URL: `https://your-project.vercel.app`
+- Custom domain: `https://yourdomain.com` (after DNS is set up)
+
+---
+
+## Troubleshooting
+
+**Build fails with "turbo run build exited with 1"**
+- Ensure `.next` is never committed (it's in `.gitignore`). Build artifacts can break Vercel's fresh build.
