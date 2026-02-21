@@ -1,7 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 type QualityCardProps = {
   title: string;
@@ -9,7 +9,7 @@ type QualityCardProps = {
   Icon: LucideIcon;
   toneClass: string;
   iconSize?: number;
-  variants?: Record<string, unknown>;
+  variants?: Variants;
 };
 
 export function QualityCard({

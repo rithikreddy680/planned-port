@@ -237,7 +237,7 @@ export function NarrativeSection() {
                     }}
                     transition={{
                       type: "tween",
-                      ease: [0.25, 0.46, 0.45, 0.94],
+                      ease: [0.25, 0.46, 0.45, 0.94] as const,
                       duration: 0.42,
                     }}
                     onClick={() => goToIndex(index)}

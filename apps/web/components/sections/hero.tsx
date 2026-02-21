@@ -23,7 +23,7 @@ const headlineWord = {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] }
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as const }
   }
 };
 
@@ -141,7 +141,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
                 initial={{ y: `${ROLL_WORD_HEIGHT_EM}em`, opacity: 0 }}
                 animate={{ y: "0em", opacity: 1 }}
                 exit={{ y: `-${ROLL_WORD_HEIGHT_EM}em`, opacity: 0 }}
-                transition={{ duration: ROLL_ANIM_DURATION, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: ROLL_ANIM_DURATION, ease: [0.22, 1, 0.36, 1] as const }}
                 aria-hidden
               >
                 {ROLLING_WORDS[rollingIndex]}
@@ -172,7 +172,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
             className="inline-flex items-start gap-1 text-foreground"
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
           >
             <motion.span
               data-cursor-hover

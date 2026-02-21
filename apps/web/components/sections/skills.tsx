@@ -121,7 +121,7 @@ export function SkillsSection() {
                 initial={{ opacity: 0, x: direction * SLIDE_OFFSET }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -direction * SLIDE_OFFSET }}
-                transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const }}
                 className="absolute inset-0 flex flex-col items-center justify-center text-center"
               >
                 <h3 className="font-display mb-4 text-2xl font-semibold tracking-tight md:text-3xl">

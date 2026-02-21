@@ -13,7 +13,7 @@ export function SmoothScroll({ children }: Props) {
       return;
     }
 
-    let lenisInstance: InstanceType<typeof import("@studio-freight/lenis")> | null = null;
+    let lenisInstance: { destroy: () => void; raf: (time: number) => void } | null = null;
     let frame: number | null = null;
     let cancelled = false;
 
@@ -24,10 +24,9 @@ export function SmoothScroll({ children }: Props) {
         lerp: 0.1,
         duration: 1.2,
         smoothWheel: true,
-        smoothTouch: false,
       });
 
-      (window as unknown as { lenis?: typeof lenisInstance }).lenis = lenisInstance;
+      (window as unknown as { lenis?: unknown }).lenis = lenisInstance;
 
       const raf = (time: number) => {
         lenisInstance?.raf(time);
