@@ -12,8 +12,9 @@ git push origin main
 
 1. Go to [vercel.com](https://vercel.com) → **Add New** → **Project**
 2. Import your GitHub repository
-3. **Important:** Leave **Root Directory** blank (repo root) so `turbo run build` runs correctly
-4. Click **Deploy** (first deploy may fail until env vars are set—that's okay)
+3. **Important:** Set **Root Directory** to `apps/web` (so Vercel finds the Next.js app)
+4. Enable **Include source files outside of the Root Directory** (Project Settings → General) for the monorepo
+5. Click **Deploy** (first deploy may fail until env vars are set—that's okay)
 
 ## 3. Add Environment Variables
 
@@ -47,5 +48,12 @@ git push origin main
 
 ## Troubleshooting
 
-**Build fails with "turbo run build exited with 1"**
+**"No Next.js version detected"**  
+- Set **Root Directory** to `apps/web` (Vercel → Project Settings → General)  
+- Enable **Include source files outside of the Root Directory**
+
+**"Ignored build scripts" (pnpm)**  
+- Run `pnpm approve-builds` locally, or the root `package.json` already has `onlyBuiltDependencies` for sharp/esbuild
+
+**Build fails with "turbo run build exited with 1"**  
 - Ensure `.next` is never committed (it's in `.gitignore`). Build artifacts can break Vercel's fresh build.
