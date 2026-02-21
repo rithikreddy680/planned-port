@@ -1,18 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["RESEND_API_KEY", "CONTACT_EMAIL"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**"]
     },
-    "lint": {
-      "outputs": []
-    },
-    "test": {
-      "outputs": []
-    },
-    "dev": {
-      "cache": false
-    }
+    "lint": { "outputs": [] },
+    "test": { "outputs": [] },
+    "dev": { "cache": false }
   }
 }
