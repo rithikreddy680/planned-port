@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const CARD_BASE =
   'rounded-xl border border-border/50 backdrop-blur-md dark:border-white/[0.08]';
@@ -52,12 +53,14 @@ export function ContactSection() {
         </header>
 
         <div className="flex flex-col gap-8 sm:gap-10 lg:flex-row lg:items-start lg:gap-12 xl:gap-16">
-          <article
+          <motion.article
             className={`relative w-full min-h-[360px] overflow-hidden sm:min-h-[400px] lg:min-h-[420px] lg:flex-1 ${CARD_BASE} bg-card/70 px-5 py-7 dark:bg-card/50 sm:px-6 sm:py-8 md:px-8 md:py-9 lg:px-10 lg:py-11`}
             style={{
               boxShadow:
                 '0 0 0 1px hsl(var(--border)/0.4), 0 4px 24px -4px rgba(0,0,0,0.25), 0 2px 12px -2px rgba(0,0,0,0.15)',
             }}
+            whileHover={{ scale: 1.03 }}
+            transition={{ type: 'tween', duration: 0.2 }}
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(250,250,250,0.04),transparent_55%)] dark:bg-[radial-gradient(circle_at_top,_rgba(0,0,0,0.2),transparent_55%)]" />
             <div className="relative z-10 flex h-full flex-col">
@@ -155,7 +158,7 @@ export function ContactSection() {
                 // READY TO CONNECT
               </p>
             </div>
-          </article>
+          </motion.article>
 
         </div>
       </div>

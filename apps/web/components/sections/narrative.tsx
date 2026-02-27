@@ -242,6 +242,7 @@ export function NarrativeSection() {
                     }}
                     onClick={() => goToIndex(index)}
                     whileHover={{
+                      scale: 1.03,
                       backgroundColor: "hsl(var(--card) / 0.98)",
                       borderColor: "hsl(var(--foreground) / 0.5)",
                     }}
@@ -283,7 +284,8 @@ export function NarrativeSection() {
             key={activeIndex}
             initial={{ opacity: 0.3 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.2 }}
+            whileHover={{ scale: 1.03 }}
+            transition={{ type: "tween", duration: 0.2 }}
             className="relative overflow-hidden rounded-xl border border-border/50 bg-card/70 px-8 py-9 backdrop-blur-md dark:border-white/[0.08] dark:bg-card/50 md:px-10 md:py-11"
             style={{
               boxShadow:

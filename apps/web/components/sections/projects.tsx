@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
 import { projects } from "@/lib/content";
 import type { Project as ProjectType } from "@/lib/types";
 
@@ -12,10 +13,10 @@ const CARD_BASE =
 /* ─── Simple collapsed card ─── */
 function ProjectCard({
   project,
-  onHover,
+  onClick: onCardClick,
 }: {
   project: ProjectType;
-  onHover: (cardRect: DOMRect) => void;
+  onClick: (cardRect: DOMRect) => void;
 }) {
   return (
     <motion.article
@@ -24,7 +25,7 @@ function ProjectCard({
         boxShadow:
           "0 0 0 1px hsl(var(--border)/0.35), 0 4px 16px -4px rgba(0,0,0,0.2), 0 2px 8px -2px rgba(0,0,0,0.1)",
       }}
-      onMouseEnter={(e) => onHover(e.currentTarget.getBoundingClientRect())}
+      onClick={(e) => onCardClick(e.currentTarget.getBoundingClientRect())}
       whileHover={{ scale: 1.03 }}
       transition={{ type: "tween", duration: 0.2 }}
     >
@@ -69,7 +70,6 @@ function FlipOverlay({
     <div
       className="absolute inset-0 z-50"
       style={{ perspective: 1400 }}
-      onMouseLeave={onClose}
     >
       <motion.div
         className="absolute"
@@ -122,7 +122,7 @@ function FlipOverlay({
           </p>
         </div>
 
-        {/* Back face – fully solid, expanded content */}
+        {/* Back face – fully solid, expanded content + close X */}
         <div
           className="absolute inset-0 flex flex-col overflow-y-auto rounded-xl border border-border/60 bg-background p-8 dark:border-white/[0.1] dark:bg-background md:p-10"
           style={{
@@ -133,6 +133,14 @@ function FlipOverlay({
               "0 0 0 1px hsl(var(--border)/0.3), 0 25px 60px -12px rgba(0,0,0,0.3), 0 12px 28px -8px rgba(0,0,0,0.2)",
           }}
         >
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); onClose(); }}
+            aria-label="Close"
+            className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-lg border border-foreground/20 bg-foreground/[0.04] text-muted-foreground transition-colors hover:bg-foreground/[0.08] hover:text-foreground"
+          >
+            <X size={18} strokeWidth={2} />
+          </button>
           <p className="font-architect mb-2 text-[0.65rem] uppercase tracking-wider text-muted-foreground">
             {project.year} · {project.subtitle.toUpperCase()}
           </p>
@@ -191,7 +199,7 @@ export function ProjectsSection() {
   const startIdx = page * CARDS_PER_PAGE;
   const visibleProjects = projects.slice(startIdx, startIdx + CARDS_PER_PAGE);
 
-  const handleHover = (project: ProjectType, cardRect: DOMRect) => {
+  const handleClick = (project: ProjectType, cardRect: DOMRect) => {
     const grid = gridRef.current;
     if (!grid) return;
     const gr = grid.getBoundingClientRect();
@@ -218,7 +226,7 @@ export function ProjectsSection() {
             SELECTED PROJECTS
           </p>
           <p className="font-narrator mt-1 text-sm text-muted-foreground md:text-base">
-            Hover to flip
+            Click to expand
           </p>
         </header>
 
@@ -251,13 +259,12 @@ export function ProjectsSection() {
           <div
             ref={gridRef}
             className="relative grid min-h-[480px] flex-1 grid-cols-2 grid-rows-2 gap-6 md:min-h-[560px] md:gap-8"
-            onMouseLeave={() => setHoveredProject(null)}
           >
             {visibleProjects.map((project) => (
               <ProjectCard
                 key={project.id}
                 project={project}
-                onHover={(rect) => handleHover(project, rect)}
+                onClick={(rect) => handleClick(project, rect)}
               />
             ))}
 

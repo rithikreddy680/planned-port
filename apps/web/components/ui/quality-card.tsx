@@ -24,6 +24,8 @@ export function QualityCard({
     <motion.article
       variants={variants}
       className={`relative flex min-h-[320px] flex-col gap-6 rounded-3xl border border-black/10 p-6 text-black md:min-h-[360px] md:p-7 ${toneClass}`}
+      whileHover={{ scale: 1.03 }}
+      transition={{ type: "tween", duration: 0.2 }}
     >
       <div className="flex items-center justify-center text-black">
         <Icon size={iconSize} strokeWidth={1.5} aria-hidden />

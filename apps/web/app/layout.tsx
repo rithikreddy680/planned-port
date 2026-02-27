@@ -4,6 +4,7 @@ import { aeonik, geistSans, geistMono } from "./fonts";
 import { CursorSpotlight } from "@/components/motion/cursor-spotlight";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { FigmaCursor } from "@/components/ui/figma-cursor";
+import { BackgroundVideo } from "@/components/background-video";
 
 export const metadata: Metadata = {
   title: "Rithik Reddy | Full Stack Software Engineer",
@@ -21,15 +22,8 @@ export default function RootLayout({
       <body className="min-h-screen bg-transparent text-foreground antialiased">
         <SmoothScroll>
           <div className="relative min-h-screen overflow-hidden">
-            {/* Background video – loop + continuous subtle scale to mask reset */}
-            <video
-              className="pointer-events-none fixed inset-0 -z-50 h-full w-full object-cover animate-bg-breathe"
-              src="/cc3.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-            />
+            {/* Background video – loop + subtle scale, played at 1.5x speed */}
+            <BackgroundVideo />
 
             {/* Soft top gradient */}
             <div className="pointer-events-none fixed inset-0 -z-40 bg-[radial-gradient(circle_at_top,_rgba(250,250,250,0.06),transparent_60%)]" />
