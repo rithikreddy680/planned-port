@@ -309,24 +309,46 @@ export function ProjectsSection() {
 
           <div
             ref={gridRef}
-            className="relative grid min-h-[320px] flex-1 grid-cols-1 gap-3 sm:grid-cols-2 sm:min-h-[420px] sm:gap-4 md:min-h-[480px] md:gap-5 lg:min-h-[520px] lg:gap-6"
+            className={`relative min-h-[320px] flex-1 sm:min-h-[420px] md:min-h-[480px] lg:min-h-[520px] ${
+              visibleProjects.length < CARDS_PER_PAGE
+                ? "flex items-center justify-center"
+                : "grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:gap-5 lg:gap-6"
+            }`}
           >
-            {Array.from({ length: CARDS_PER_PAGE }, (_, i) => {
-              const project = visibleProjects[i] ?? null;
-              return project ? (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  onClick={(rect) => handleClick(project, rect)}
-                />
-              ) : (
-                <div
-                  key={`placeholder-${i}`}
-                  className="min-h-[120px] rounded-xl sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px]"
-                  aria-hidden
-                />
-              );
-            })}
+            {visibleProjects.length < CARDS_PER_PAGE ? (
+              /* Partial page: same grid structure & card sizes as full page */
+              <div
+                className="grid w-full max-w-full grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:gap-5 lg:gap-6"
+              >
+                {visibleProjects.map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    onClick={(rect) => handleClick(project, rect)}
+                  />
+                ))}
+              </div>
+            ) : (
+              /* Full page: standard 4-slot grid */
+              <>
+                {Array.from({ length: CARDS_PER_PAGE }, (_, i) => {
+                  const project = visibleProjects[i] ?? null;
+                  return project ? (
+                    <ProjectCard
+                      key={project.id}
+                      project={project}
+                      onClick={(rect) => handleClick(project, rect)}
+                    />
+                  ) : (
+                    <div
+                      key={`placeholder-${i}`}
+                      className="min-h-[120px] rounded-xl sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px]"
+                      aria-hidden
+                    />
+                  );
+                })}
+              </>
+            )}
 
             <AnimatePresence>
               {hoveredProject && (

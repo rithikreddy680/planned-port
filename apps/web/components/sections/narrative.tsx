@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { experiences } from "@/lib/content";
 
 const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -52,6 +52,154 @@ function useIsMobile() {
 
 const SCROLL_COOLDOWN_MS = 960;
 const SCROLL_THRESHOLD = 200;
+
+/* Mobile: horizontal arc strip – active card elevated, swipe/tap to switch */
+function MobileExperienceSelector({
+  experiences,
+  activeIndex,
+  onSelect,
+  embedded = false,
+}: {
+  experiences: typeof import("@/lib/content").experiences;
+  activeIndex: number;
+  onSelect: (i: number) => void;
+  embedded?: boolean;
+}) {
+  const touchStartRef = useRef(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartRef.current = e.touches[0]!.clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const dx = e.changedTouches[0]!.clientX - touchStartRef.current;
+    if (Math.abs(dx) > 50) {
+      onSelect((activeIndex + (dx > 0 ? -1 : 1) + experiences.length) % experiences.length);
+    }
+  };
+
+  return (
+    <div
+      className="w-full"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Subtle arc curve – visual bridge to desktop arc tumbler */}
+      {!embedded && (
+        <div className="relative mx-auto mb-3 flex justify-center">
+          <svg
+            className="pointer-events-none absolute -top-1 h-6 w-full opacity-[0.08]"
+            viewBox="0 0 200 24"
+            preserveAspectRatio="none"
+            aria-hidden
+          >
+            <path
+              d="M 0 20 Q 100 0 200 20"
+              fill="none"
+              stroke="hsl(var(--foreground))"
+              strokeWidth="1.5"
+            />
+          </svg>
+        </div>
+      )}
+
+      {/* Horizontal strip – active card elevated (arc apex) */}
+      <div className="relative flex items-end justify-center gap-1.5 sm:gap-2">
+        {experiences.map((exp, index) => {
+          const isActive = index === activeIndex;
+          return (
+            <motion.button
+              key={exp.company}
+              type="button"
+              role="option"
+              aria-selected={isActive}
+              onClick={() => onSelect(index)}
+              className={`relative flex min-w-0 flex-1 flex-col items-center rounded-xl border backdrop-blur-md transition-colors ${
+                isActive
+                  ? "z-10 border-foreground/55 bg-card shadow-[0_0_0_2px_hsl(var(--foreground)/0.2),0_8px_24px_-4px_rgba(0,0,0,0.25)]"
+                  : "z-0 border-foreground/30 bg-card/75"
+              }`}
+              initial={false}
+              animate={{
+                y: isActive ? -6 : 0,
+                scale: isActive ? 1.02 : 0.92,
+                opacity: isActive ? 1 : 0.85,
+              }}
+              transition={{ type: "spring", stiffness: 400, damping: 28 }}
+              whileTap={{ scale: isActive ? 0.98 : 0.9 }}
+            >
+              {/* Index badge */}
+              <span
+                className={`absolute -top-1.5 left-1/2 -translate-x-1/2 font-architect text-[0.5rem] uppercase tracking-widest ${
+                  isActive ? "text-foreground/90" : "text-foreground/50"
+                }`}
+                aria-hidden
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span
+                className={`w-full truncate px-3 py-3.5 text-center font-architect text-[clamp(0.52rem,2vw,0.62rem)] uppercase leading-snug tracking-wider ${
+                  isActive ? "font-semibold text-foreground" : "text-foreground/90"
+                }`}
+              >
+                {exp.role}
+              </span>
+            </motion.button>
+          );
+        })}
+      </div>
+
+      {!embedded && (
+        <p className="mt-2 text-center font-architect text-[clamp(0.48rem,1.8vw,0.56rem)] uppercase tracking-[0.2em] text-foreground/70">
+          Swipe or tap · {activeIndex + 1}/{experiences.length}
+        </p>
+      )}
+    </div>
+  );
+}
+
+/* Shared terminal content for mobile unified card */
+function MobileTerminalContent({
+  activeExp,
+  headerScramble,
+  streamedLines,
+  streamComplete,
+}: {
+  activeExp: (typeof experiences)[number];
+  headerScramble: string | null;
+  streamedLines: string[];
+  streamComplete: boolean;
+}) {
+  return (
+    <div className="relative z-10">
+      <p className="font-architect mb-1.5 text-[clamp(0.55rem,1.6vw,0.62rem)] uppercase tracking-wider text-muted-foreground">
+        {activeExp.role.toUpperCase()} · {activeExp.period}
+      </p>
+      <h3 className="font-display mb-2 min-h-[1.5rem] break-words text-[clamp(0.95rem,2.8vw,1.25rem)] font-semibold leading-tight tracking-tight">
+        {headerScramble !== null ? headerScramble : activeExp.company.toUpperCase()}
+      </h3>
+      <div className="font-narrator space-y-2 break-words text-[clamp(0.7rem,2vw,1rem)] leading-relaxed text-muted-foreground">
+        {streamedLines.map((line, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex gap-2"
+          >
+            <span className="mt-1.5 h-px w-4 shrink-0 bg-foreground/40" />
+            <span>{line}</span>
+          </motion.div>
+        ))}
+        {!streamComplete && (
+          <span className="inline-block h-4 w-2 animate-pulse bg-foreground/80" aria-hidden />
+        )}
+      </div>
+      <p className="font-architect mt-4 border-t border-border/40 pt-3 text-[clamp(0.45rem,1.4vw,0.52rem)] uppercase tracking-[0.2em] text-muted-foreground/55">
+        // CONNECTION: SECURE
+      </p>
+    </div>
+  );
+}
 
 export function NarrativeSection() {
   const isMobile = useIsMobile();
@@ -179,47 +327,40 @@ export function NarrativeSection() {
       </h2>
 
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-stretch justify-center gap-8 overflow-visible lg:flex-row lg:items-center lg:gap-12 xl:gap-16">
-        {/* Left: Vertical tumbler (desktop) or stacked cards (mobile) */}
+        {/* Desktop: Left tumbler | Right terminal. Mobile: unified card with embedded selector */}
+        {isMobile ? (
+          /* Mobile: single unified card – selector strip + terminal content */
+          <div className="flex w-full max-w-[min(100%,480px)] flex-col">
+            <motion.article
+              className="relative overflow-hidden rounded-xl border border-border/50 bg-card/70 backdrop-blur-md dark:border-white/[0.08] dark:bg-card/50"
+              style={{
+                boxShadow:
+                  "0 0 0 1px hsl(var(--border)/0.4), 0 4px 24px -4px rgba(0,0,0,0.25), 0 2px 12px -2px rgba(0,0,0,0.15)",
+              }}
+            >
+              <div className="border-b border-border/40 px-3 pt-3 pb-2.5">
+                <MobileExperienceSelector
+                  experiences={experiences}
+                  activeIndex={activeIndex}
+                  onSelect={goToIndex}
+                  embedded
+                />
+              </div>
+              <div className="relative px-4 py-5">
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.04),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_right,_rgba(0,0,0,0.1),transparent_50%)]" />
+                <MobileTerminalContent
+                  activeExp={activeExp}
+                  headerScramble={headerScramble}
+                  streamedLines={streamedLines}
+                  streamComplete={streamComplete}
+                />
+              </div>
+            </motion.article>
+          </div>
+        ) : (
+        <>
+        {/* Desktop: Left arc tumbler */}
         <aside className="flex min-w-0 flex-1 items-center justify-center overflow-visible lg:min-w-[460px] lg:flex-[1] lg:justify-start">
-          {/* Mobile: simple vertical stack – tap to select */}
-          {isMobile ? (
-            <div className="w-full max-w-[min(100%,380px)] space-y-2 sm:space-y-3">
-              {experiences.map((exp, index) => {
-                const isActive = index === activeIndex;
-                return (
-                  <button
-                    key={exp.company}
-                    type="button"
-                    role="option"
-                    aria-selected={isActive}
-                    onClick={() => goToIndex(index)}
-                    className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3.5 text-left backdrop-blur-md transition-all duration-200 ${
-                      isActive
-                        ? "border-foreground/55 bg-card shadow-[0_0_0_2px_hsl(var(--foreground)/0.2),0_4px_12px_-2px_rgba(0,0,0,0.2)]"
-                        : "border-foreground/35 bg-card/80"
-                    }`}
-                  >
-                    <span
-                      className={`h-1 w-1 shrink-0 rounded-full ${
-                        isActive ? "bg-foreground" : "opacity-0"
-                      }`}
-                      aria-hidden
-                    />
-                    <span
-                      className={`min-w-0 flex-1 truncate font-architect text-[clamp(0.58rem,2.2vw,0.68rem)] uppercase leading-snug tracking-wider ${
-                        isActive ? "font-semibold text-foreground" : "text-foreground/95"
-                      }`}
-                    >
-                      {exp.role}
-                    </span>
-                  </button>
-                );
-              })}
-              <p className="pt-1 font-architect text-[clamp(0.52rem,2vw,0.6rem)] uppercase tracking-widest text-foreground/80">
-                Tap to select
-              </p>
-            </div>
-          ) : (
           <div
             ref={containerRef}
             tabIndex={0}
@@ -342,7 +483,6 @@ export function NarrativeSection() {
               Scroll or click to select
             </p>
           </div>
-          )}
         </aside>
 
         {/* Connector */}
@@ -403,6 +543,8 @@ export function NarrativeSection() {
             </div>
           </motion.article>
         </div>
+        </>
+        )}
       </div>
     </section>
   );
