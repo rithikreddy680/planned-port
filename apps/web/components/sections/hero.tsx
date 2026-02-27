@@ -116,7 +116,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
           className="font-black uppercase leading-[0.8] text-foreground/90 max-w-[90vw] break-words"
           style={{
             fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
-            fontSize: "clamp(2.5rem, 12vw, 6rem)"
+            fontSize: "clamp(2.5rem, 12vw, 12rem)"
           }}
         >
           BUILDING
@@ -126,7 +126,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
           className="font-black uppercase leading-[0.8] text-foreground/90 max-w-[90vw] break-words"
           style={{
             fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
-            fontSize: "clamp(2.5rem, 12vw, 6rem)"
+            fontSize: "clamp(2.5rem, 12vw, 12rem)"
           }}
         >
           <span
@@ -154,7 +154,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
           className="font-black uppercase leading-[0.8] text-foreground/90 max-w-[90vw] break-words"
           style={{
             fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
-            fontSize: "clamp(2.5rem, 12vw, 6rem)"
+            fontSize: "clamp(2.5rem, 12vw, 12rem)"
           }}
         >
           LOGIC

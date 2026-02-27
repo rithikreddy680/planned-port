@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
 import { X } from "lucide-react";
 import { projects } from "@/lib/content";
 import type { Project as ProjectType } from "@/lib/types";
@@ -26,11 +27,12 @@ function ProjectCard({
 }) {
   return (
     <motion.article
-      className={`relative flex min-w-0 flex-col justify-end overflow-hidden cursor-pointer ${CARD_BASE} bg-card/70 p-4 dark:bg-card/50 sm:p-5 sm:min-h-[140px] md:p-6 md:min-h-[160px] lg:p-7 lg:min-h-[180px]`}
+      data-project-id={project.id}
       style={{
         boxShadow:
           "0 0 0 1px hsl(var(--border)/0.35), 0 4px 16px -4px rgba(0,0,0,0.2), 0 2px 8px -2px rgba(0,0,0,0.1)",
       }}
+      className={`relative flex min-w-0 flex-col justify-end overflow-hidden cursor-pointer ${CARD_BASE} bg-card/70 p-4 dark:bg-card/50 sm:p-5 sm:min-h-[140px] md:p-6 md:min-h-[160px] lg:p-7 lg:min-h-[180px]`}
       onClick={(e) => onCardClick(e.currentTarget.getBoundingClientRect())}
       whileHover={{ scale: 1.03 }}
       transition={{ type: "tween", duration: 0.2 }}
@@ -263,6 +265,29 @@ export function ProjectsSection() {
     });
   };
 
+  const handleClose = useCallback(() => {
+    if (!hoveredProject || !gridRef.current) {
+      setHoveredProject(null);
+      return;
+    }
+    const grid = gridRef.current;
+    const cardEl = grid.querySelector(`[data-project-id="${hoveredProject.project.id}"]`);
+    if (cardEl) {
+      const cardRect = cardEl.getBoundingClientRect();
+      const gr = grid.getBoundingClientRect();
+      setHoveredProject({
+        ...hoveredProject,
+        cardTop: cardRect.top - gr.top,
+        cardLeft: cardRect.left - gr.left,
+        cardWidth: cardRect.width,
+        cardHeight: cardRect.height,
+      });
+      setTimeout(() => setHoveredProject(null), 0);
+    } else {
+      setHoveredProject(null);
+    }
+  }, [hoveredProject]);
+
   return (
     <section
       id="projects"
@@ -309,46 +334,26 @@ export function ProjectsSection() {
 
           <div
             ref={gridRef}
-            className={`relative min-h-[320px] flex-1 sm:min-h-[420px] md:min-h-[480px] lg:min-h-[520px] ${
-              visibleProjects.length < CARDS_PER_PAGE
-                ? "flex items-center justify-center"
-                : "grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:gap-5 lg:gap-6"
+            className={`relative grid min-h-[320px] flex-1 grid-cols-1 gap-3 sm:min-h-[420px] sm:grid-cols-2 sm:gap-4 md:min-h-[480px] md:gap-5 lg:min-h-[520px] lg:gap-6 ${
+              visibleProjects.length < CARDS_PER_PAGE ? "content-center" : ""
             }`}
           >
-            {visibleProjects.length < CARDS_PER_PAGE ? (
-              /* Partial page: same grid structure & card sizes as full page */
-              <div
-                className="grid w-full max-w-full grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:gap-5 lg:gap-6"
-              >
-                {visibleProjects.map((project) => (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    onClick={(rect) => handleClick(project, rect)}
-                  />
-                ))}
-              </div>
-            ) : (
-              /* Full page: standard 4-slot grid */
-              <>
-                {Array.from({ length: CARDS_PER_PAGE }, (_, i) => {
-                  const project = visibleProjects[i] ?? null;
-                  return project ? (
-                    <ProjectCard
-                      key={project.id}
-                      project={project}
-                      onClick={(rect) => handleClick(project, rect)}
-                    />
-                  ) : (
-                    <div
-                      key={`placeholder-${i}`}
-                      className="min-h-[120px] rounded-xl sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px]"
-                      aria-hidden
-                    />
-                  );
-                })}
-              </>
-            )}
+            {Array.from({ length: CARDS_PER_PAGE }, (_, i) => {
+              const project = visibleProjects[i] ?? null;
+              return project ? (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  onClick={(rect) => handleClick(project, rect)}
+                />
+              ) : (
+                <div
+                  key={`placeholder-${i}`}
+                  className="min-h-[120px] rounded-xl sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px]"
+                  aria-hidden
+                />
+              );
+            })}
 
             <AnimatePresence>
               {hoveredProject && (
@@ -362,7 +367,7 @@ export function ProjectsSection() {
                   cardHeight={hoveredProject.cardHeight}
                   gridWidth={hoveredProject.gridWidth}
                   gridHeight={hoveredProject.gridHeight}
-                  onClose={() => setHoveredProject(null)}
+                  onClose={handleClose}
                 />
               )}
             </AnimatePresence>
