@@ -10,23 +10,23 @@ export function Footer() {
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-2">
-          <p className="font-narrator text-sm text-foreground/80 md:text-base">
+          <p className="font-narrator text-[clamp(0.8rem,2.2vw,1rem)] text-foreground/80 sm:text-sm md:text-base">
             Designed &amp; engineered by Rithik Reddy
           </p>
-          <p className="font-architect text-[0.65rem] uppercase tracking-wider text-muted-foreground">
+          <p className="font-architect text-[clamp(0.55rem,1.6vw,0.65rem)] uppercase tracking-wider text-muted-foreground">
             Williams Landing, 3027 · Australia · {year}
           </p>
         </div>
 
         <nav
-          className="flex items-center gap-6 sm:gap-8"
+          className="flex items-center gap-4 sm:gap-6 md:gap-8"
           aria-label="Footer links"
         >
           <a
             href="https://www.linkedin.com/in/rithik-reddy"
             target="_blank"
             rel="noreferrer"
-            className="font-architect text-[0.65rem] uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
+            className="font-architect text-[clamp(0.55rem,1.6vw,0.65rem)] uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
           >
             LinkedIn
           </a>
@@ -34,7 +34,7 @@ export function Footer() {
             href="https://github.com/yourusername"
             target="_blank"
             rel="noreferrer"
-            className="font-architect text-[0.65rem] uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
+            className="font-architect text-[clamp(0.55rem,1.6vw,0.65rem)] uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
           >
             GitHub
           </a>
@@ -42,7 +42,7 @@ export function Footer() {
       </div>
 
       <p
-        className="font-architect-narrow mx-auto mt-8 text-center text-[0.55rem] uppercase tracking-[0.35em] text-muted-foreground/70"
+        className="font-architect-narrow mx-auto mt-6 sm:mt-8 text-center text-[clamp(0.45rem,1.4vw,0.55rem)] uppercase tracking-[0.35em] text-muted-foreground/70"
         style={{ fontFamily: 'var(--font-geist-mono), monospace' }}
       >
         Portfolio · Digital Noir

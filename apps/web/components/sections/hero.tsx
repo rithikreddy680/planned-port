@@ -89,7 +89,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
   return (
     <section
       ref={containerRef}
-      className="relative flex min-h-screen flex-col overflow-hidden"
+      className="relative flex min-h-screen min-h-[100dvh] flex-col overflow-hidden"
     >
       {/* Background cover image */}
       <div
@@ -104,7 +104,7 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
 
       {/* Typographic poster: stacked headline (parallax 1.2x) */}
       <motion.div
-        className="pointer-events-none absolute inset-0 flex flex-col justify-center pl-[8vw] will-change-transform"
+        className="pointer-events-none absolute inset-0 flex flex-col justify-center pl-[5vw] pr-4 sm:pl-[8vw] will-change-transform"
         style={{ y: -parallaxOffset }}
         variants={headlineContainer}
         initial="hidden"
@@ -113,20 +113,20 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
       >
         <motion.span
           variants={headlineWord}
-          className="font-black uppercase leading-[0.8] text-foreground/90"
+          className="font-black uppercase leading-[0.8] text-foreground/90 max-w-[90vw] break-words"
           style={{
             fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
-            fontSize: "12vw"
+            fontSize: "clamp(2.5rem, 12vw, 6rem)"
           }}
         >
           BUILDING
         </motion.span>
         <motion.span
           variants={headlineWord}
-          className="font-black uppercase leading-[0.8] text-foreground/90"
+          className="font-black uppercase leading-[0.8] text-foreground/90 max-w-[90vw] break-words"
           style={{
             fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
-            fontSize: "12vw"
+            fontSize: "clamp(2.5rem, 12vw, 6rem)"
           }}
         >
           <span
@@ -151,10 +151,10 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
         </motion.span>
         <motion.span
           variants={headlineWord}
-          className="font-black uppercase leading-[0.8] text-foreground/90"
+          className="font-black uppercase leading-[0.8] text-foreground/90 max-w-[90vw] break-words"
           style={{
             fontFamily: "var(--font-geist-sans), var(--font-aeonik), sans-serif",
-            fontSize: "12vw"
+            fontSize: "clamp(2.5rem, 12vw, 6rem)"
           }}
         >
           LOGIC
@@ -201,27 +201,35 @@ export function HeroSection({ scrollY = 0, onViewWork }: HeroSectionProps) {
           </motion.span>
         </header>
 
-        {/* View Work – small, dimmed, bounces across header */}
+        {/* View Work – tap/click to scroll. Float animation only on desktop (smooth on mobile) */}
         <div
-          className="absolute inset-0 flex items-end justify-end pb-8 pr-6 pt-20 md:pb-10 md:pr-12 lg:pr-20"
+          className="absolute inset-0 flex items-end justify-end pb-6 pr-4 pt-16 sm:pb-8 sm:pr-6 md:pb-10 md:pr-12 lg:pr-20"
           onMouseMove={handleMagnetic}
           onMouseLeave={resetMagnetic}
         >
-          <div className="animate-float">
+          <div className="hidden sm:block sm:animate-float">
             <motion.button
               data-magnetic-btn
               style={{ x: springX, y: springY }}
               onClick={scrollToProjects}
-              className="group relative flex aspect-square h-[clamp(110px,12.6vw,234px)] w-[clamp(110px,12.6vw,234px)] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-foreground/90 bg-foreground/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-[0_0_60px_rgba(255,255,255,0.85)] focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+              className="group relative flex aspect-square h-[clamp(90px,12.6vw,234px)] w-[clamp(90px,12.6vw,234px)] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-foreground/90 bg-foreground/90 text-black shadow-[0_0_24px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-[0_0_60px_rgba(255,255,255,0.85)] focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40 sm:focus-visible:ring-0"
               whileHover={{ scale: 1.1 }}
             >
               <ChevronDown
-                className="h-[clamp(2.4rem,3.2vw,3.8rem)] w-[clamp(2.4rem,3.2vw,3.8rem)]"
+                className="h-[clamp(2rem,3.2vw,3.8rem)] w-[clamp(2rem,3.2vw,3.8rem)]"
                 strokeWidth={3}
                 aria-hidden
               />
             </motion.button>
           </div>
+          {/* Mobile: static button, no float */}
+          <button
+            onClick={scrollToProjects}
+            aria-label="Scroll to projects"
+            className="flex sm:hidden h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-foreground/90 bg-foreground/90 text-black shadow-[0_0_16px_rgba(255,255,255,0.2)] transition-colors active:scale-95"
+          >
+            <ChevronDown size={28} strokeWidth={3} aria-hidden />
+          </button>
         </div>
       </div>
     </section>

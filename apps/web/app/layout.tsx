@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { aeonik, geistSans, geistMono } from "./fonts";
 import { CursorSpotlight } from "@/components/motion/cursor-spotlight";
@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   title: "Rithik Reddy | Full Stack Software Engineer",
   description:
     "Portfolio of Rithik Reddy, a Software Engineering student at Monash University specialising in scalable logic, Next.js and SAP S/4HANA."
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1
 };
 
 export default function RootLayout({

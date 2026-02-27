@@ -189,7 +189,7 @@ export function AboutSection() {
   return (
     <section
       id="about"
-      className="relative min-h-screen px-6 py-12 md:px-12 md:py-16 lg:px-20"
+      className="relative min-h-screen px-4 py-10 sm:px-6 sm:py-12 md:px-12 md:py-16 lg:px-20"
       style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}
     >
       <div className="mx-auto flex h-full max-w-6xl flex-col">
@@ -297,7 +297,7 @@ export function AboutSection() {
         </motion.div>
 
         <motion.p
-          className="mt-10 w-full max-w-6xl text-base font-medium leading-relaxed text-foreground/80 md:text-lg"
+          className="mt-6 w-full max-w-6xl break-words text-[clamp(0.8rem,2.2vw,1.125rem)] font-medium leading-relaxed text-foreground/80 sm:mt-8 sm:text-base md:mt-10 md:text-lg"
           variants={introVariants}
           initial="hidden"
           animate={showContent ? "show" : "hidden"}
@@ -311,7 +311,7 @@ export function AboutSection() {
 
         {/* Data Grid + Scanner Beam */}
         <motion.div
-          className="relative mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+          className="relative mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6"
           variants={gridVariants}
           initial="hidden"
           animate={showContent ? "show" : "hidden"}

@@ -38,23 +38,23 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="relative min-h-screen px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-24 lg:px-12 lg:py-24 xl:px-16 xl:py-28">
+    <section id="contact" className="relative min-h-screen min-h-[100dvh] px-4 py-12 sm:px-6 sm:py-16 md:px-10 md:py-20 lg:px-12 lg:py-24 xl:px-16 xl:py-28">
       <div className="mx-auto w-full max-w-6xl">
-        <header className="mb-8 sm:mb-10">
-          <p className="font-architect text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground sm:text-[0.7rem]">
+        <header className="mb-6 sm:mb-8 md:mb-10">
+          <p className="font-architect text-[clamp(0.55rem,1.6vw,0.7rem)] uppercase tracking-[0.2em] text-muted-foreground">
             CLOSING SCENE
           </p>
-          <h2 className="font-display mt-1 text-2xl leading-none tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
+          <h2 className="font-display mt-1 text-[clamp(1.5rem,4.5vw,3rem)] leading-none tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
             LET&apos;S BUILD.
           </h2>
-          <p className="font-narrator mt-2 max-w-xl text-xs text-muted-foreground sm:text-sm md:text-base">
+          <p className="font-narrator mt-2 max-w-xl text-[clamp(0.75rem,2vw,1rem)] text-muted-foreground sm:text-sm md:text-base">
             Have a project in mind, want to collaborate, or just say hi? Drop a message.
           </p>
         </header>
 
         <div className="flex flex-col gap-8 sm:gap-10 lg:flex-row lg:items-start lg:gap-12 xl:gap-16">
           <motion.article
-            className={`relative w-full min-h-[360px] overflow-hidden sm:min-h-[400px] lg:min-h-[420px] lg:flex-1 ${CARD_BASE} bg-card/70 px-5 py-7 dark:bg-card/50 sm:px-6 sm:py-8 md:px-8 md:py-9 lg:px-10 lg:py-11`}
+            className={`relative w-full min-h-[min(320px,55vh)] overflow-hidden sm:min-h-[380px] lg:min-h-[420px] lg:flex-1 ${CARD_BASE} bg-card/70 px-4 py-6 dark:bg-card/50 sm:px-6 sm:py-8 md:px-8 md:py-9 lg:px-10 lg:py-11`}
             style={{
               boxShadow:
                 '0 0 0 1px hsl(var(--border)/0.4), 0 4px 24px -4px rgba(0,0,0,0.25), 0 2px 12px -2px rgba(0,0,0,0.15)',
@@ -67,7 +67,7 @@ export function ContactSection() {
               <p className="font-architect mb-1.5 text-[0.62rem] uppercase tracking-wider text-muted-foreground">
                 CONTACT FORM · SEND MESSAGE
               </p>
-              <h3 className="font-display mb-6 min-h-[1.75rem] text-lg font-semibold leading-tight tracking-tight md:text-xl">
+              <h3 className="font-display mb-4 min-h-[1.5rem] text-[clamp(1rem,2.8vw,1.25rem)] font-semibold leading-tight tracking-tight sm:mb-5 md:mb-6 md:text-xl">
                 GET IN TOUCH
               </h3>
 

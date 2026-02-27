@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { experiences } from "@/lib/content";
 
 const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -10,26 +10,61 @@ const KNOWBAL_HEADLINE = "CRM Optimization & Automation";
 const KNOWBAL_METRICS = "Reduced manual admin overhead via automated email triggers.";
 const KNOWBAL_TECH = ["Smart Document Checklists", "Applicant Eligibility Checker"];
 
-const ARC_R = 130;
+const ARC_R_BASE = 130;
 const ARC_START = 55;
 const ARC_END = 125;
-const CENTER_X = 260;
-const CENTER_Y = ARC_R;
-const ITEM_W = 280;
-const ITEM_H = 80;
-const ITEM_GAP = 72;
-const LEFT_X = 8;
-const TOP_OFFSET = 90;
+const CENTER_X_BASE = 260;
+const ITEM_W_BASE = 280;
+const ITEM_H_BASE = 80;
+const ITEM_GAP_BASE = 72;
+const LEFT_X_BASE = 8;
+const TOP_OFFSET_BASE = 90;
 
-function polar(angleDeg: number, r: number) {
+function polar(arcR: number, angleDeg: number, r: number) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
-  return { x: ARC_R + r * Math.cos(rad), y: ARC_R + r * Math.sin(rad) };
+  return { x: arcR + r * Math.cos(rad), y: arcR + r * Math.sin(rad) };
+}
+
+function useTumblerScale() {
+  const [width, setWidth] = useState(1024);
+  useEffect(() => {
+    const onResize = () => setWidth(typeof window !== "undefined" ? window.innerWidth : 1024);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return useMemo(() => {
+    if (width >= 640) return 1;
+    return Math.max(0.42, Math.min(1, width / 420));
+  }, [width]);
+}
+
+function useIsMobile() {
+  const [width, setWidth] = useState(1024);
+  useEffect(() => {
+    const onResize = () => setWidth(typeof window !== "undefined" ? window.innerWidth : 1024);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return width < 640;
 }
 
 const SCROLL_COOLDOWN_MS = 960;
 const SCROLL_THRESHOLD = 200;
 
 export function NarrativeSection() {
+  const isMobile = useIsMobile();
+  const scale = useTumblerScale();
+  const ARC_R = Math.round(ARC_R_BASE * scale);
+  const CENTER_X = Math.round(CENTER_X_BASE * scale);
+  const CENTER_Y = ARC_R;
+  const ITEM_W = Math.round(ITEM_W_BASE * scale);
+  const ITEM_H = Math.round(ITEM_H_BASE * scale);
+  const ITEM_GAP = Math.round(ITEM_GAP_BASE * scale);
+  const LEFT_X = Math.round(LEFT_X_BASE * scale);
+  const TOP_OFFSET = Math.round(TOP_OFFSET_BASE * scale);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [headerScramble, setHeaderScramble] = useState<string | null>(null);
   const [streamedLines, setStreamedLines] = useState<string[]>([]);
@@ -136,16 +171,55 @@ export function NarrativeSection() {
   return (
     <section
       id="experience"
-      className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden px-4 py-20 md:px-8 lg:px-12 xl:px-16 2xl:px-24"
+      className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden px-4 py-14 sm:py-16 md:px-8 md:py-20 lg:px-12 lg:py-20 xl:px-16 2xl:px-24"
       aria-label="Experience"
     >
-      <h2 className="relative z-10 mb-12 font-architect text-[0.7rem] uppercase tracking-[0.35em] text-foreground/90">
+      <h2 className="relative z-10 mb-8 sm:mb-10 md:mb-12 font-architect text-[clamp(0.6rem,1.8vw,0.7rem)] uppercase tracking-[0.35em] text-foreground/90">
         Experience
       </h2>
 
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-stretch justify-center gap-8 overflow-visible lg:flex-row lg:items-center lg:gap-12 xl:gap-16">
-        {/* Left: Vertical tumbler – all 3 visible, scroll or click to select */}
+        {/* Left: Vertical tumbler (desktop) or stacked cards (mobile) */}
         <aside className="flex min-w-0 flex-1 items-center justify-center overflow-visible lg:min-w-[460px] lg:flex-[1] lg:justify-start">
+          {/* Mobile: simple vertical stack – tap to select */}
+          {isMobile ? (
+            <div className="w-full max-w-[min(100%,380px)] space-y-2 sm:space-y-3">
+              {experiences.map((exp, index) => {
+                const isActive = index === activeIndex;
+                return (
+                  <button
+                    key={exp.company}
+                    type="button"
+                    role="option"
+                    aria-selected={isActive}
+                    onClick={() => goToIndex(index)}
+                    className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3.5 text-left backdrop-blur-md transition-all duration-200 ${
+                      isActive
+                        ? "border-foreground/55 bg-card shadow-[0_0_0_2px_hsl(var(--foreground)/0.2),0_4px_12px_-2px_rgba(0,0,0,0.2)]"
+                        : "border-foreground/35 bg-card/80"
+                    }`}
+                  >
+                    <span
+                      className={`h-1 w-1 shrink-0 rounded-full ${
+                        isActive ? "bg-foreground" : "opacity-0"
+                      }`}
+                      aria-hidden
+                    />
+                    <span
+                      className={`min-w-0 flex-1 truncate font-architect text-[clamp(0.58rem,2.2vw,0.68rem)] uppercase leading-snug tracking-wider ${
+                        isActive ? "font-semibold text-foreground" : "text-foreground/95"
+                      }`}
+                    >
+                      {exp.role}
+                    </span>
+                  </button>
+                );
+              })}
+              <p className="pt-1 font-architect text-[clamp(0.52rem,2vw,0.6rem)] uppercase tracking-widest text-foreground/80">
+                Tap to select
+              </p>
+            </div>
+          ) : (
           <div
             ref={containerRef}
             tabIndex={0}
@@ -158,10 +232,10 @@ export function NarrativeSection() {
             {/* Track – 3 items; selected scrolls to center, others scroll in vertical column (left) */}
             <div
               className="relative overflow-visible"
-              style={{
-                width: ITEM_W + (CENTER_X - ITEM_W / 2) + 40,
-                minHeight: ITEM_H * 3 + ITEM_GAP * 2 + 160,
-              }}
+            style={{
+              width: "min(100%, " + (ITEM_W + (CENTER_X - ITEM_W / 2) + 40) + "px)",
+              minHeight: ITEM_H * 3 + ITEM_GAP * 2 + 160,
+            }}
             >
               {/* Arc guide – subtle, aligned with center */}
               <svg
@@ -176,8 +250,8 @@ export function NarrativeSection() {
                 <path
                   d={(() => {
                     const r = ARC_R - 2;
-                    const s = polar(ARC_START, r);
-                    const e = polar(ARC_END, r);
+                    const s = polar(ARC_R, ARC_START, r);
+                    const e = polar(ARC_R, ARC_END, r);
                     return `M ${s.x} ${s.y} A ${r} ${r} 0 0 1 ${e.x} ${e.y}`;
                   })()}
                   fill="none"
@@ -254,7 +328,7 @@ export function NarrativeSection() {
                       aria-hidden
                     />
                     <span
-                      className={`min-w-0 flex-1 overflow-visible whitespace-nowrap font-architect text-[0.68rem] uppercase leading-snug tracking-wider ${
+                      className={`min-w-0 flex-1 overflow-hidden truncate font-architect text-[0.6rem] uppercase leading-snug tracking-wider sm:text-[0.68rem] ${
                         isActive ? "font-semibold text-foreground" : "text-foreground/95"
                       }`}
                     >
@@ -264,10 +338,11 @@ export function NarrativeSection() {
                 );
               })}
             </div>
-            <p className="mt-3 font-architect text-[0.6rem] uppercase tracking-widest text-foreground/80">
+            <p className="mt-3 font-architect text-[clamp(0.52rem,1.8vw,0.6rem)] uppercase tracking-widest text-foreground/80">
               Scroll or click to select
             </p>
           </div>
+          )}
         </aside>
 
         {/* Connector */}
@@ -279,14 +354,14 @@ export function NarrativeSection() {
         </div>
 
         {/* Right: Terminal card */}
-        <div className="flex min-h-[360px] min-w-0 flex-1 flex-col justify-center lg:min-h-[420px] lg:flex-[3]">
+        <div className="flex min-h-[min(360px,70vh)] min-w-0 flex-1 flex-col justify-center lg:min-h-[420px] lg:flex-[3]">
           <motion.article
             key={activeIndex}
             initial={{ opacity: 0.3 }}
             animate={{ opacity: 1 }}
             whileHover={{ scale: 1.03 }}
             transition={{ type: "tween", duration: 0.2 }}
-            className="relative overflow-hidden rounded-xl border border-border/50 bg-card/70 px-8 py-9 backdrop-blur-md dark:border-white/[0.08] dark:bg-card/50 md:px-10 md:py-11"
+            className="relative min-w-0 overflow-hidden rounded-xl border border-border/50 bg-card/70 px-4 py-5 backdrop-blur-md dark:border-white/[0.08] dark:bg-card/50 sm:px-6 sm:py-7 md:px-10 md:py-11"
             style={{
               boxShadow:
                 "0 0 0 1px hsl(var(--border)/0.4), 0 4px 24px -4px rgba(0,0,0,0.25), 0 2px 12px -2px rgba(0,0,0,0.15)",
@@ -294,14 +369,14 @@ export function NarrativeSection() {
           >
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.04),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_right,_rgba(0,0,0,0.1),transparent_50%)]" />
             <div className="relative z-10">
-            <p className="font-architect mb-1.5 text-[0.62rem] uppercase tracking-wider text-muted-foreground">
+            <p className="font-architect mb-1.5 text-[clamp(0.55rem,1.6vw,0.62rem)] uppercase tracking-wider text-muted-foreground">
               {activeExp.role.toUpperCase()} · {activeExp.period}
             </p>
-            <h3 className="font-display mb-4 min-h-[1.75rem] text-lg font-semibold leading-tight tracking-tight md:text-xl">
+            <h3 className="font-display mb-2 min-h-[1.5rem] break-words text-[clamp(0.95rem,2.8vw,1.25rem)] font-semibold leading-tight tracking-tight sm:mb-3 sm:min-h-[1.75rem] md:mb-4 md:text-xl">
               {headerScramble !== null ? headerScramble : activeExp.company.toUpperCase()}
             </h3>
 
-            <div className="font-narrator space-y-2.5 text-sm leading-relaxed text-muted-foreground md:text-base">
+            <div className="font-narrator space-y-2 sm:space-y-2.5 break-words text-[clamp(0.7rem,2vw,1rem)] leading-relaxed text-muted-foreground sm:text-sm md:text-base">
               {streamedLines.map((line, i) => (
                 <motion.div
                   key={i}
@@ -322,7 +397,7 @@ export function NarrativeSection() {
               )}
             </div>
 
-            <p className="font-architect mt-6 border-t border-border/40 pt-4 text-[0.52rem] uppercase tracking-[0.2em] text-muted-foreground/55">
+            <p className="font-architect mt-4 sm:mt-6 border-t border-border/40 pt-3 sm:pt-4 text-[clamp(0.45rem,1.4vw,0.52rem)] uppercase tracking-[0.2em] text-muted-foreground/55">
               // CONNECTION: SECURE
             </p>
             </div>

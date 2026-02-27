@@ -91,11 +91,11 @@ export function SkillsSection() {
   );
 
   return (
-    <section id="arsenal" className="relative min-h-[80vh] px-6 py-24 md:px-12 lg:px-20">
-      <div className="mx-auto max-w-6xl space-y-10">
-        <header className="space-y-3 text-center">
-          <p className="font-architect text-[0.7rem] text-muted-foreground">THE ARSENAL</p>
-          <h2 className="font-display text-2xl leading-none tracking-tight md:text-3xl">
+    <section id="arsenal" className="relative min-h-[min(70vh,600px)] px-4 py-12 sm:px-6 sm:py-16 md:px-12 md:py-20 lg:px-20 lg:py-24">
+      <div className="mx-auto max-w-6xl space-y-6 sm:space-y-8 md:space-y-10">
+        <header className="space-y-2 sm:space-y-3 text-center">
+          <p className="font-architect text-[clamp(0.6rem,1.8vw,0.7rem)] text-muted-foreground">THE ARSENAL</p>
+          <h2 className="font-display text-[clamp(1.25rem,4vw,1.875rem)] leading-none tracking-tight md:text-3xl">
             Future interests and goals.
           </h2>
         </header>
@@ -105,7 +105,7 @@ export function SkillsSection() {
           tabIndex={0}
           role="region"
           aria-label="Arsenal slideshow – scroll or use arrow keys to change slides"
-          className="relative mx-auto mt-6 h-[340px] max-w-4xl cursor-default overflow-hidden rounded-xl border border-border/50 bg-card/70 outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-foreground/40 focus-visible:ring-offset-2 dark:border-white/[0.08] dark:bg-card/50 sm:h-[380px]"
+          className="relative mx-auto mt-4 h-[min(260px,50vh)] max-w-4xl cursor-default overflow-hidden rounded-xl border border-border/50 bg-card/70 outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-foreground/40 focus-visible:ring-offset-2 dark:border-white/[0.08] dark:bg-card/50 sm:mt-6 sm:h-[320px] md:h-[360px] lg:h-[380px]"
           style={{
             boxShadow:
               '0 0 0 1px hsl(var(--border)/0.4), 0 4px 24px -4px rgba(0,0,0,0.25), 0 2px 12px -2px rgba(0,0,0,0.15)',
@@ -114,7 +114,7 @@ export function SkillsSection() {
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(250,250,250,0.04),transparent_55%)] dark:bg-[radial-gradient(circle_at_top,_rgba(0,0,0,0.2),transparent_55%)]" />
 
-          <div className="relative z-10 flex h-full flex-col items-center justify-center overflow-hidden px-8 py-12 md:px-16">
+          <div className="relative z-10 flex h-full flex-col items-center justify-center overflow-hidden px-4 py-6 sm:px-6 sm:py-10 md:px-12 md:py-12 lg:px-16">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeIndex}
@@ -124,10 +124,10 @@ export function SkillsSection() {
                 transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const }}
                 className="absolute inset-0 flex flex-col items-center justify-center text-center"
               >
-                <h3 className="font-display mb-4 text-2xl font-semibold tracking-tight md:text-3xl">
+                <h3 className="font-display mb-2 break-words px-2 text-[clamp(1rem,3vw,1.5rem)] font-semibold tracking-tight sm:mb-3 md:mb-4 md:text-2xl lg:text-3xl">
                   {arsenalSlides[activeIndex]?.title}
                 </h3>
-                <p className="font-narrator max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
+                <p className="font-narrator max-w-xl break-words px-3 text-[clamp(0.7rem,2vw,1rem)] leading-relaxed text-muted-foreground sm:px-4 sm:text-sm md:text-base">
                   {arsenalSlides[activeIndex]?.description}
                 </p>
               </motion.div>
@@ -135,7 +135,7 @@ export function SkillsSection() {
           </div>
 
           <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3">
-            <p className="font-architect mr-1 hidden text-[0.52rem] uppercase tracking-[0.2em] text-muted-foreground sm:block">
+            <p className="font-architect mr-1 hidden text-[clamp(0.45rem,1.4vw,0.52rem)] uppercase tracking-[0.2em] text-muted-foreground sm:block">
               Scroll to navigate
             </p>
             {arsenalSlides.map((_, i) => (
