@@ -103,7 +103,7 @@ function MobileExperienceSelector({
       )}
 
       {/* Horizontal strip – active card elevated (arc apex) */}
-      <div className="relative flex items-end justify-center gap-1.5 sm:gap-2">
+      <div className="relative flex items-end justify-center gap-2 sm:gap-2.5">
         {experiences.map((exp, index) => {
           const isActive = index === activeIndex;
           return (
@@ -113,32 +113,32 @@ function MobileExperienceSelector({
               role="option"
               aria-selected={isActive}
               onClick={() => onSelect(index)}
-              className={`relative flex min-w-0 flex-1 flex-col items-center rounded-xl border backdrop-blur-md transition-colors ${
+              className={`relative flex min-h-[52px] min-w-0 flex-1 flex-col items-center justify-center rounded-2xl border-2 backdrop-blur-xl transition-colors touch-manipulation active:scale-[0.98] ${
                 isActive
-                  ? "z-10 border-foreground/55 bg-card shadow-[0_0_0_2px_hsl(var(--foreground)/0.2),0_8px_24px_-4px_rgba(0,0,0,0.25)]"
-                  : "z-0 border-foreground/30 bg-card/75"
+                  ? "z-10 border-foreground/60 bg-card/95 shadow-[0_0_0_2px_hsl(var(--foreground)/0.15),0_12px_32px_-8px_rgba(0,0,0,0.35),0_4px_16px_-4px_rgba(0,0,0,0.2)]"
+                  : "z-0 border-foreground/25 bg-card/60"
               }`}
               initial={false}
               animate={{
-                y: isActive ? -6 : 0,
-                scale: isActive ? 1.02 : 0.92,
-                opacity: isActive ? 1 : 0.85,
+                y: isActive ? -8 : 0,
+                scale: isActive ? 1.03 : 0.94,
+                opacity: isActive ? 1 : 0.8,
               }}
-              transition={{ type: "spring", stiffness: 400, damping: 28 }}
-              whileTap={{ scale: isActive ? 0.98 : 0.9 }}
+              transition={{ type: "spring", stiffness: 380, damping: 26 }}
+              whileTap={{ scale: isActive ? 0.98 : 0.92 }}
             >
               {/* Index badge */}
               <span
-                className={`absolute -top-1.5 left-1/2 -translate-x-1/2 font-architect text-[0.5rem] uppercase tracking-widest ${
-                  isActive ? "text-foreground/90" : "text-foreground/50"
+                className={`absolute -top-2 left-1/2 -translate-x-1/2 rounded-full px-2 py-0.5 font-architect text-[0.5rem] uppercase tracking-widest ${
+                  isActive ? "bg-foreground/15 text-foreground/95" : "text-foreground/40"
                 }`}
                 aria-hidden
               >
                 {String(index + 1).padStart(2, "0")}
               </span>
               <span
-                className={`w-full truncate px-3 py-3.5 text-center font-architect text-[clamp(0.52rem,2vw,0.62rem)] uppercase leading-snug tracking-wider ${
-                  isActive ? "font-semibold text-foreground" : "text-foreground/90"
+                className={`block w-full truncate px-3 py-2 text-center font-architect text-[clamp(0.58rem,2.4vw,0.68rem)] uppercase leading-snug tracking-wider ${
+                  isActive ? "font-semibold text-foreground" : "text-foreground/85"
                 }`}
               >
                 {exp.role}
@@ -148,11 +148,27 @@ function MobileExperienceSelector({
         })}
       </div>
 
-      {!embedded && (
-        <p className="mt-2 text-center font-architect text-[clamp(0.48rem,1.8vw,0.56rem)] uppercase tracking-[0.2em] text-foreground/70">
-          Swipe or tap · {activeIndex + 1}/{experiences.length}
-        </p>
-      )}
+      {/* Progress indicator + swipe hint */}
+      {/* Progress dots – always show when embedded, full hint when standalone */}
+      <div className={`flex items-center justify-center gap-2 ${embedded ? "mt-2" : "mt-3 flex-col gap-2"}`}>
+        <div className="flex items-center gap-1.5">
+          {experiences.map((_, i) => (
+            <motion.span
+              key={i}
+              className={`rounded-full transition-all duration-300 ${
+                i === activeIndex ? "h-2 w-5 bg-foreground/75" : "h-1.5 w-1.5 bg-foreground/25"
+              }`}
+              animate={i === activeIndex ? { scale: [1, 1.08, 1] } : {}}
+              transition={{ duration: 0.35 }}
+            />
+          ))}
+        </div>
+        {!embedded && (
+          <p className="font-architect text-[clamp(0.5rem,2vw,0.58rem)] uppercase tracking-[0.25em] text-foreground/60">
+            Swipe or tap · {activeIndex + 1}/{experiences.length}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
@@ -171,30 +187,39 @@ function MobileTerminalContent({
 }) {
   return (
     <div className="relative z-10">
-      <p className="font-architect mb-1.5 text-[clamp(0.55rem,1.6vw,0.62rem)] uppercase tracking-wider text-muted-foreground">
-        {activeExp.role.toUpperCase()} · {activeExp.period}
-      </p>
-      <h3 className="font-display mb-2 min-h-[1.5rem] break-words text-[clamp(0.95rem,2.8vw,1.25rem)] font-semibold leading-tight tracking-tight">
+      {/* Role + period badge */}
+      <div className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1">
+        <span className="font-architect rounded-md bg-foreground/[0.06] px-2 py-0.5 text-[clamp(0.52rem,1.8vw,0.6rem)] uppercase tracking-wider text-muted-foreground">
+          {activeExp.role.toUpperCase()}
+        </span>
+        <span className="font-architect text-[clamp(0.5rem,1.6vw,0.58rem)] uppercase tracking-widest text-muted-foreground/80">
+          ·
+        </span>
+        <span className="font-architect text-[clamp(0.5rem,1.6vw,0.58rem)] uppercase tracking-wider text-muted-foreground/90">
+          {activeExp.period}
+        </span>
+      </div>
+      <h3 className="font-display mb-3 min-h-[1.75rem] break-words text-[clamp(1rem,3.2vw,1.35rem)] font-semibold leading-tight tracking-tight">
         {headerScramble !== null ? headerScramble : activeExp.company.toUpperCase()}
       </h3>
-      <div className="font-narrator space-y-2 break-words text-[clamp(0.7rem,2vw,1rem)] leading-relaxed text-muted-foreground">
+      <div className="font-narrator space-y-2.5 break-words text-[clamp(0.8rem,2.4vw,1rem)] leading-[1.6] text-muted-foreground">
         {streamedLines.map((line, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, x: -6 }}
+            initial={{ opacity: 0, x: -8 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.2 }}
-            className="flex gap-2"
+            transition={{ duration: 0.25, delay: i * 0.03 }}
+            className="flex gap-2.5"
           >
-            <span className="mt-1.5 h-px w-4 shrink-0 bg-foreground/40" />
+            <span className="mt-2 h-px w-5 shrink-0 bg-foreground/50" />
             <span>{line}</span>
           </motion.div>
         ))}
         {!streamComplete && (
-          <span className="inline-block h-4 w-2 animate-pulse bg-foreground/80" aria-hidden />
+          <span className="inline-block h-4 w-2.5 animate-pulse rounded-sm bg-foreground/70" aria-hidden />
         )}
       </div>
-      <p className="font-architect mt-4 border-t border-border/40 pt-3 text-[clamp(0.45rem,1.4vw,0.52rem)] uppercase tracking-[0.2em] text-muted-foreground/55">
+      <p className="font-architect mt-5 border-t border-border/50 pt-4 text-[clamp(0.48rem,1.6vw,0.54rem)] uppercase tracking-[0.22em] text-muted-foreground/60">
         // CONNECTION: SECURE
       </p>
     </div>
@@ -319,26 +344,30 @@ export function NarrativeSection() {
   return (
     <section
       id="experience"
-      className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden px-4 py-14 sm:py-16 md:px-8 md:py-20 lg:px-12 lg:py-20 xl:px-16 2xl:px-24"
+      className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden px-4 py-12 sm:py-16 md:px-8 md:py-20 lg:px-12 lg:py-20 xl:px-16 2xl:px-24"
       aria-label="Experience"
     >
-      <h2 className="relative z-10 mb-8 sm:mb-10 md:mb-12 font-architect text-[clamp(0.6rem,1.8vw,0.7rem)] uppercase tracking-[0.35em] text-foreground/90">
+      <h2 className="relative z-10 mb-6 sm:mb-10 md:mb-12 font-architect text-[clamp(0.6rem,1.8vw,0.7rem)] uppercase tracking-[0.35em] text-foreground/90">
         Experience
       </h2>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-stretch justify-center gap-8 overflow-visible lg:flex-row lg:items-center lg:gap-12 xl:gap-16">
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-stretch justify-center gap-6 overflow-visible sm:gap-8 lg:flex-row lg:items-center lg:gap-12 xl:gap-16">
         {/* Desktop: Left tumbler | Right terminal. Mobile: unified card with embedded selector */}
         {isMobile ? (
           /* Mobile: single unified card – selector strip + terminal content */
-          <div className="flex w-full max-w-[min(100%,480px)] flex-col">
+          <div className="flex w-full max-w-[min(100%,520px)] flex-col mx-auto">
             <motion.article
-              className="relative overflow-hidden rounded-xl border border-border/50 bg-card/70 backdrop-blur-md dark:border-white/[0.08] dark:bg-card/50"
+              className="relative overflow-hidden rounded-2xl border-2 border-border/60 bg-card/80 backdrop-blur-xl dark:border-white/[0.1] dark:bg-card/60"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               style={{
                 boxShadow:
-                  "0 0 0 1px hsl(var(--border)/0.4), 0 4px 24px -4px rgba(0,0,0,0.25), 0 2px 12px -2px rgba(0,0,0,0.15)",
+                  "0 0 0 1px hsl(var(--border)/0.5), 0 8px 32px -8px rgba(0,0,0,0.3), 0 4px 16px -4px rgba(0,0,0,0.2)",
               }}
             >
-              <div className="border-b border-border/40 px-3 pt-3 pb-2.5">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(255,255,255,0.06),transparent)] dark:bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(255,255,255,0.03),transparent)]" />
+              <div className="relative border-b border-border/50 px-4 pt-4 pb-3">
                 <MobileExperienceSelector
                   experiences={experiences}
                   activeIndex={activeIndex}
@@ -346,8 +375,8 @@ export function NarrativeSection() {
                   embedded
                 />
               </div>
-              <div className="relative px-4 py-5">
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.04),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_right,_rgba(0,0,0,0.1),transparent_50%)]" />
+              <div className="relative max-h-[min(55vh,400px)] overflow-y-auto overscroll-contain px-4 py-5">
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_right,_rgba(0,0,0,0.08),transparent_50%)]" />
                 <MobileTerminalContent
                   activeExp={activeExp}
                   headerScramble={headerScramble}
